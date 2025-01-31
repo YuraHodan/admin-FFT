@@ -1,0 +1,15 @@
+<div class="sidebar" [class.collapsed]="!isExpanded">
+  <div class="sidebar-header">
+    <button class="btn btn-toggle" (click)="toggleSidebar()">
+      <i class="bi" [class.bi-chevron-left]="isExpanded" [class.bi-chevron-right]="!isExpanded"></i>
+    </button>
+  </div>
+  <ul class="nav flex-column">
+    <li class="nav-item" *ngFor="let item of menuItems">
+      <a class="nav-link" [routerLink]="item.link" routerLinkActive="active">
+        <i [class]="item.icon"></i>
+        <span *ngIf="isExpanded">{{ item.title }}</span>
+      </a>
+    </li>
+  </ul>
+</div>

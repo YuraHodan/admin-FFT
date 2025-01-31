@@ -1,0 +1,47 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col">
+      <div class="d-flex align-items-center gap-3">
+        <h2 class="mb-0">Teams</h2>
+        <button class="btn btn-primary rounded-circle add-team-btn" (click)="onCreateTeam()">
+          <i class="bi bi-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="teams-table">
+      <thead>
+        <tr>
+          <th class="col-logo">Logo</th>
+          <th class="col-name">Name</th>
+          <th class="col-players">Players</th>
+          <th class="col-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let team of teams" [class.archived-team]="team.isArchived">
+          <td>
+            <img [src]="team.logo" alt="Team logo" class="team-logo rounded-circle">
+          </td>
+          <td>{{ team.name }}</td>
+          <td>{{ team.playersCount }}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary" (click)="onEdit(team)">
+                Edit
+              </button>
+              <button class="btn btn-sm btn-outline-warning" (click)="onArchive(team)">
+                {{ team.isArchived ? 'Unarchive' : 'Archive' }}
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="onDelete(team)">
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

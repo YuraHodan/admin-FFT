@@ -1,0 +1,90 @@
+.team-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.btn-group {
+  .btn {
+    padding: 0.375rem 0.75rem;
+    min-width: 100px;
+    
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+  }
+}
+
+.table {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  th {
+    font-weight: 500;
+  }
+}
+
+.archived-team {
+  background-color: #f8f9fa;  // сірий колір з Bootstrap
+  opacity: 0.8;
+  
+  td {
+    color: #6c757d;  // темніший сірий для тексту
+  }
+}
+
+.teams-table {
+  width: 100%;
+  table-layout: fixed;
+
+  th, td {
+    padding: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-bottom: 1px solid #dee2e6;  // Bootstrap's default border color
+  }
+
+  thead {
+    tr {
+      border-bottom: 2px solid #dee2e6;  // Трохи товщий бордер для хедера
+    }
+  }
+
+  tbody {
+    tr:last-child td {
+      border-bottom: none;  // Прибираємо нижній бордер з останнього рядка
+    }
+  }
+
+  // Фіксовані розміри для кожної колонки
+  .col-logo {
+    width: 80px;
+  }
+
+  .col-name {
+    width: 25%;
+  }
+
+  .col-players {
+    width: 15%;
+  }
+
+  .col-actions {
+    width: 150px;
+  }
+}
+
+.add-team-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  i {
+    font-size: 1.5rem;
+  }
+}

@@ -1,0 +1,71 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    {{ modalTitle }}
+    <span class="ms-1 fw-bold" *ngIf="!isNewTeam">({{ team.name }})</span>
+  </h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="name" class="form-label">Team Name</label>
+      <input type="text" class="form-control" id="name" formControlName="name">
+      <div class="invalid-feedback" *ngIf="form.get('name')?.errors?.['required'] && form.get('name')?.touched">
+        Team name is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Team Logo</label>
+      <div class="d-flex align-items-center gap-3">
+        <div>
+          <input type="file" class="form-control" (change)="onFileChange($event)" accept="image/*">
+        </div>
+        <div class="d-flex gap-2 align-items-center" *ngIf="previewImage40 || previewImage60">
+          <img [src]="previewImage40" alt="Preview 40x40" class="preview-40">
+          <img [src]="previewImage60" alt="Preview 60x60" class="preview-60">
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Players</h5>
+        <button type="button" class="btn btn-primary" (click)="onAddPlayer()">Add Player</button>
+      </div>
+      
+      <div class="mb-3">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Search players..." 
+          [(ngModel)]="playerFilter"
+          [ngModelOptions]="{standalone: true}">
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of filteredPlayers">
+            <td>{{ player.firstName }} {{ player.lastName }}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-outline-danger">Remove</button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredPlayers.length === 0">
+            <td colspan="2" class="text-center">No players found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="!form.valid">Save</button>
+</div> 

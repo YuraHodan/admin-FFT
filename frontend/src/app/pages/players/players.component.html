@@ -1,0 +1,53 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col">
+      <div class="d-flex align-items-center gap-3">
+        <h2 class="mb-0">Players</h2>
+        <button class="btn btn-primary rounded-circle add-player-btn" (click)="onEdit(null)">
+          <i class="bi bi-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Photo</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Club</th>
+          <th>Fantasy Position</th>
+          <th>Mantra Position</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let player of players" [class.archived-player]="player.isArchived">
+          <td>
+            <img [src]="player.photo" [alt]="player.firstName" class="player-photo">
+          </td>
+          <td>{{ player.firstName }}</td>
+          <td>{{ player.lastName }}</td>
+          <td>{{ player.team?.name }}</td>
+          <td>{{ player.fantasyPosition }}</td>
+          <td>{{ player.mantraPosition }}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-outline-primary" (click)="onEdit(player)">
+                Edit
+              </button>
+              <button class="btn btn-outline-warning" (click)="onArchive(player)">
+                {{ player.isArchived ? 'Unarchive' : 'Archive' }}
+              </button>
+              <button class="btn btn-outline-danger" (click)="onDelete(player)">
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> 

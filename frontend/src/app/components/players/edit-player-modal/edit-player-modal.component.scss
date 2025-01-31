@@ -1,0 +1,133 @@
+@import "@ng-select/ng-select/themes/default.theme.css";
+@import "world-flags-sprite/stylesheets/flags32.css";
+
+.preview-container {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.preview-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.preview-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.preview-50x70 {
+  width: 50px;
+  height: 70px;
+  object-fit: cover;
+}
+
+.preview-160x240 {
+  width: 160px;
+  height: 240px;
+  object-fit: cover;
+}
+
+.preview-90x160 {
+  width: 90px;
+  height: 160px;
+  object-fit: cover;
+}
+
+.modal-body {
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow: visible !important;
+}
+
+::ng-deep {
+  .ng-select {
+    .ng-select-container {
+      min-height: 38px;
+      border-radius: 0.375rem;
+      background-color: #fff;
+      border: 1px solid #ced4da;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      
+      &:hover {
+        border-color: #86b7fe;
+      }
+
+      .ng-value-container {
+        .ng-placeholder {
+          display: none;
+        }
+        
+        .ng-value {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+    
+    &.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+      border-color: #86b7fe;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    .ng-dropdown-panel {
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0.375rem;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      z-index: 1056;
+      background: white;
+      
+      .ng-dropdown-panel-items {
+        background: white;
+      }
+
+      .ng-option {
+        padding: 8px 12px;
+        background: white;
+        
+        &.ng-option-selected {
+          background-color: #e9ecef;
+        }
+        
+        &:hover {
+          background-color: #f8f9fa;
+        }
+      }
+    }
+  }
+
+  .modal-body {
+    .ng-dropdown-panel {
+      position: fixed;
+      width: auto !important;
+      min-width: 200px;
+    }
+  }
+}
+
+.f32 {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.country-name {
+  vertical-align: middle;
+}
+
+.custom-select {
+  .ng-value-container {
+    padding: 0.375rem 0.75rem;
+  }
+}
+
+.selected-country {
+  display: flex;
+  align-items: center;
+  
+  .f32 {
+    margin-right: 8px;
+  }
+} 

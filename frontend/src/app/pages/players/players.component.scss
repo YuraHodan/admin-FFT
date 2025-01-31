@@ -1,0 +1,49 @@
+.player-photo {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.btn-group {
+  .btn {
+    padding: 0.375rem 0.75rem;
+    min-width: 100px;
+    
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+  }
+}
+
+.table {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  th {
+    font-weight: 500;
+  }
+}
+
+.archived-player {
+  background-color: #f8f9fa;
+  opacity: 0.8;
+  
+  td {
+    color: #6c757d;
+  }
+}
+
+.add-player-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  i {
+    font-size: 1.5rem;
+  }
+} 
