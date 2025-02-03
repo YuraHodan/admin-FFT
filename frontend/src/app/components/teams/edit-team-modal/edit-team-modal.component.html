@@ -54,7 +54,7 @@
           <tr *ngFor="let player of filteredPlayers">
             <td>{{ player.firstName }} {{ player.lastName }}</td>
             <td>
-              <button type="button" class="btn btn-sm btn-outline-danger">Remove</button>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removePlayer(player.id)">Remove</button>
             </td>
           </tr>
           <tr *ngIf="filteredPlayers.length === 0">

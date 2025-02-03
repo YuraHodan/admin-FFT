@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let team of teams" [class.archived-team]="team.isArchived">
+        <tr *ngFor="let team of teams$ | async" [class.archived-team]="team.isArchived">
           <td>
             <img [src]="team.logo" alt="Team logo" class="team-logo rounded-circle">
           </td>

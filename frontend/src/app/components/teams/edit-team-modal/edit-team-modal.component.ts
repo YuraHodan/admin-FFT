@@ -24,6 +24,13 @@ export class EditTeamModalComponent implements OnInit {
     return this.isNewTeam ? 'Create Team' : 'Edit Team';
   }
 
+  get filteredPlayers(): PlayerList[] {
+    return this.team.players.filter(player => {
+      const fullName = `${player.firstName} ${player.lastName}`.toLowerCase();
+      return fullName.includes(this.playerFilter.toLowerCase());
+    });
+  }
+
   constructor(
     public modal: NgbActiveModal,
     private fb: FormBuilder
@@ -42,13 +49,6 @@ export class EditTeamModalComponent implements OnInit {
     }
   }
 
-  get filteredPlayers(): PlayerList[] {
-    return this.team.players.filter(player => {
-      const fullName = `${player.firstName} ${player.lastName}`.toLowerCase();
-      return fullName.includes(this.playerFilter.toLowerCase());
-    });
-  }
-
   onFileChange(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -64,16 +64,25 @@ export class EditTeamModalComponent implements OnInit {
     }
   }
 
+  removePlayer(playerId: number): void {
+    // Видаляємо гравця з масиву
+    this.team.players = this.team.players.filter(player => player.id !== playerId);
+    // Оновлюємо кількість гравців
+    this.team.playersCount = this.team.players.length;
+  }
+
   onAddPlayer() {
     console.log(1);
   }
 
   onSubmit() {
     if (this.form.valid) {
-      this.modal.close({
+      const updatedTeam = {
         ...this.team,
-        ...this.form.value
-      });
+        ...this.form.value,
+        logo: this.form.value.logo || 'https://placehold.co/400x400'
+      };
+      this.modal.close(updatedTeam);
     }
   }
 } 
