@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Player } from '../../models/player.interface';
@@ -6,6 +6,7 @@ import { PlayerFantasyPosition, PlayerMantraPosition } from '../../models/player
 import { PlayerDeleteModalComponent } from '../../components/players/confirm-delete-modal/confirm-delete-modal.component';
 import { PlayerArchiveModalComponent } from '../../components/players/confirm-archive-modal/confirm-archive-modal.component';
 import { EditPlayerModalComponent } from '../../components/players/edit-player-modal/edit-player-modal.component';
+import { PlayersService } from '../../services/players.service';
 
 @Component({
   selector: 'app-players',
@@ -14,39 +15,36 @@ import { EditPlayerModalComponent } from '../../components/players/edit-player-m
   templateUrl: './players.component.html',
   styleUrl: './players.component.scss'
 })
-export class PlayersComponent {
-  players: Player[] = [
-    {
-      id: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      photo: 'https://via.placeholder.com/40',
-      team: {
-        id: 1,
-        name: 'Team Alpha'
-      },
-      fantasyPosition: PlayerFantasyPosition.Goalkeeper,
-      mantraPosition: PlayerMantraPosition.Goalkeeper,
-      isArchived: false,
-      birthDate: new Date('1990-01-01'),
-      country: 'Ukraine'
-    },
-    // Додайте більше тестових даних за потреби
-  ];
+export class PlayersComponent implements OnInit {
+  players: Player[] = [];
 
-  constructor(private modalService: NgbModal) {}
+  constructor(
+    private modalService: NgbModal,
+    private playersService: PlayersService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadPlayers();
+    this.playersService.players$.subscribe(players => {
+      this.players = players;
+    });
+  }
+
+  loadPlayers(): void {
+    this.playersService.loadPlayers().subscribe();
+  }
 
   onEdit(player: Player | null): void {
     const modalRef = this.modalService.open(EditPlayerModalComponent, { size: 'lg' });
     modalRef.componentInstance.player = player || {
-      id: Math.max(...this.players.map(p => p.id), 0) + 1,
+      id: 0,
       firstName: '',
       lastName: '',
       photo: '',
       birthDate: new Date(),
       country: '',
-      fantasyPosition: PlayerFantasyPosition.Midfielder,
-      mantraPosition: PlayerMantraPosition.Midfielder,
+      fantasyPosition: PlayerFantasyPosition.MID,
+      mantraPosition: PlayerMantraPosition.M,
       isArchived: false
     };
     modalRef.componentInstance.isNewPlayer = !player;
@@ -54,14 +52,9 @@ export class PlayersComponent {
     modalRef.closed.subscribe((result: Player) => {
       if (result) {
         if (player) {
-          const index = this.players.findIndex(p => p.id === result.id);
-          if (index !== -1) {
-            const updatedPlayers = [...this.players];
-            updatedPlayers[index] = result;
-            this.players = updatedPlayers;
-          }
+          this.playersService.updatePlayer(result.id, result).subscribe();
         } else {
-          this.players = [...this.players, result];
+          this.playersService.createPlayer(result).subscribe();
         }
       }
     });
@@ -73,15 +66,7 @@ export class PlayersComponent {
 
     modalRef.closed.subscribe((result: Player) => {
       if (result) {
-        const index = this.players.findIndex(p => p.id === result.id);
-        if (index !== -1) {
-          const updatedPlayers = [...this.players];
-          updatedPlayers[index] = {
-            ...updatedPlayers[index],
-            isArchived: !updatedPlayers[index].isArchived
-          };
-          this.players = updatedPlayers;
-        }
+        this.playersService.toggleArchive(result.id).subscribe();
       }
     });
   }
@@ -92,7 +77,7 @@ export class PlayersComponent {
 
     modalRef.closed.subscribe((result: Player) => {
       if (result) {
-        this.players = this.players.filter(p => p.id !== result.id);
+        this.playersService.deletePlayer(result.id).subscribe();
       }
     });
   }

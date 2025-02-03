@@ -47,12 +47,18 @@ export class EditPlayerModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    const birthDate = this.player.birthDate ? new Date(this.player.birthDate).toISOString().split('T')[0] : null;
+
+    const selectedCountry = this.player.country ? 
+      COUNTRIES.find(country => country.code === this.player.country.toLowerCase())?.code : 
+      null;
+
     this.form = this.fb.group({
       firstName: [this.player.firstName, Validators.required],
       lastName: [this.player.lastName],
       photo: [null],
-      birthDate: [this.player.birthDate],
-      country: [this.player.country?.toLowerCase()],
+      birthDate: [birthDate],
+      country: [selectedCountry],
       fantasyPosition: [this.player.fantasyPosition, Validators.required],
       mantraPosition: [this.player.mantraPosition],
       team: [this.player.team]
@@ -83,9 +89,12 @@ export class EditPlayerModalComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
+      const formValue = this.form.value;
+      
       this.modal.close({
         ...this.player,
-        ...this.form.value
+        ...formValue,
+        country: formValue.country
       });
     }
   }
