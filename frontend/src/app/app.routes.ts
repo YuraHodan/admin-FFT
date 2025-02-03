@@ -8,6 +8,7 @@ import { DashboardsComponent } from './pages/dashboards/dashboards.component';
 import { FormationsComponent } from './pages/formations/formations.component';
 import { FormulasComponent } from './pages/formulas/formulas.component';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
+import { CardsComponent } from './pages/cards/cards.component';
 
 export const routes: Routes = [
   {
@@ -50,6 +51,10 @@ export const routes: Routes = [
   {
     path: '404',
     component: NotFoundComponent
+  },
+  {
+    path: 'cards',
+    component: CardsComponent
   },
   {
     path: '**',

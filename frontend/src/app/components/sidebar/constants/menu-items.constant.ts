@@ -39,5 +39,10 @@ export const MENU_ITEMS: MenuItem[] = [
     title: 'Schedule',
     icon: 'bi bi-calendar3',
     link: '/schedule'
+  },
+  {
+    title: 'Cards',
+    icon: 'bi bi-card-text',
+    link: '/cards'
   }
 ]; 
