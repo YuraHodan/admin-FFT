@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { MENU_ITEMS, MenuItem } from './constants/menu-items.constant';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,28 +12,7 @@ import { RouterModule } from '@angular/router';
 })
 export class SidebarComponent {
   isExpanded = true;
-  menuItems = [
-    {
-      title: 'Dashboard',
-      icon: 'bi bi-speedometer2',
-      link: '/dashboard'
-    },
-    {
-      title: 'Teams',
-      icon: 'bi bi-people-fill',
-      link: '/teams'
-    },
-    {
-      title: 'Players',
-      icon: 'bi bi-person-circle',
-      link: '/players'
-    },
-    {
-      title: 'News',
-      icon: 'bi bi-newspaper',
-      link: '/news'
-    }
-  ];
+  menuItems: MenuItem[] = MENU_ITEMS;
 
   toggleSidebar() {
     this.isExpanded = !this.isExpanded;
