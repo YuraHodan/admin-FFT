@@ -19,6 +19,7 @@ import { COUNTRIES } from '../../../constants/countries.constant';
 export class EditPlayerModalComponent implements OnInit {
   @Input() player!: Player;
   @Input() isNewPlayer: boolean = false;
+  @Input() teams: TeamShort[] = [];
   
   form!: FormGroup;
   previewImage50x70: string | null = null;
@@ -27,12 +28,6 @@ export class EditPlayerModalComponent implements OnInit {
 
   fantasyPositions = Object.values(PlayerFantasyPosition);
   mantraPositions = Object.values(PlayerMantraPosition);
-  teams: TeamShort[] = [
-    { id: 1, name: 'Team Alpha' },
-    { id: 2, name: 'Team Beta' },
-    { id: 3, name: 'Team Gamma' }
-  ];
-
   countries = COUNTRIES;
 
   get modalTitle(): string {
@@ -53,6 +48,10 @@ export class EditPlayerModalComponent implements OnInit {
       COUNTRIES.find(country => country.code === this.player.country.toLowerCase())?.code : 
       null;
 
+    const currentTeam = this.player.team?.id ? 
+      this.teams.find(team => team.id === this.player.team?.id) : 
+      null;
+
     this.form = this.fb.group({
       firstName: [this.player.firstName, Validators.required],
       lastName: [this.player.lastName],
@@ -61,7 +60,7 @@ export class EditPlayerModalComponent implements OnInit {
       country: [selectedCountry],
       fantasyPosition: [this.player.fantasyPosition, Validators.required],
       mantraPosition: [this.player.mantraPosition],
-      team: [this.player.team]
+      team: [currentTeam]
     });
 
     if (this.player.photo) {
@@ -91,9 +90,16 @@ export class EditPlayerModalComponent implements OnInit {
     if (this.form.valid) {
       const formValue = this.form.value;
       
+      const selectedTeam = formValue.team ? {
+        id: formValue.team.id,
+        name: formValue.team.name,
+        logo: formValue.team.logo
+      } : null;
+      
       this.modal.close({
         ...this.player,
         ...formValue,
+        team: selectedTeam,
         country: formValue.country
       });
     }

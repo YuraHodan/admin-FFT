@@ -5,7 +5,7 @@ import { PlayerFantasyPosition, PlayerMantraPosition } from '../interfaces/playe
 export interface IPlayerDocument extends Omit<IPlayer, 'id'>, Document {}
 
 const TeamShortSchema: Schema = new Schema({
-  id: { type: Number, required: true },
+  id: { type: String, required: true },
   name: { type: String, required: true },
   logo: { type: String, required: true }
 }, {

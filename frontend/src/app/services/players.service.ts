@@ -35,7 +35,7 @@ export class PlayersService {
     return this.players$;
   }
 
-  getPlayer(id: number): Observable<Player> {
+  getPlayer(id: string): Observable<Player> {
     return this.http.get<Player>(`${this.apiUrl}/${id}`).pipe(
       map(player => this.convertDates(player))
     );
@@ -51,7 +51,7 @@ export class PlayersService {
     );
   }
 
-  updatePlayer(id: number, player: Player): Observable<Player> {
+  updatePlayer(id: string, player: Player): Observable<Player> {
     return this.http.put<Player>(`${this.apiUrl}/${id}`, player).pipe(
       map(player => this.convertDates(player)),
       tap(updatedPlayer => {
@@ -65,7 +65,7 @@ export class PlayersService {
     );
   }
 
-  deletePlayer(id: number): Observable<void> {
+  deletePlayer(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       tap(() => {
         const currentPlayers = this.playersSubject.value;
@@ -74,7 +74,7 @@ export class PlayersService {
     );
   }
 
-  toggleArchive(id: number): Observable<Player> {
+  toggleArchive(id: string): Observable<Player> {
     return this.http.patch<Player>(`${this.apiUrl}/${id}/toggle-archive`, {}).pipe(
       map(player => this.convertDates(player)),
       tap(updatedPlayer => {

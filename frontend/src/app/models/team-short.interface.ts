@@ -1,4 +1,5 @@
 export interface TeamShort {
-  id: number;
+  id: string;
   name: string;
+  logo: string;
 } 

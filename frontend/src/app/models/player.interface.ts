@@ -2,7 +2,7 @@ import { PlayerFantasyPosition, PlayerMantraPosition } from './player-positions.
 import { TeamShort } from './team-short.interface';
 
 export interface Player {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   photo: string;
