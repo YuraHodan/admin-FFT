@@ -11,5 +11,7 @@ export interface Player {
   fantasyPosition: PlayerFantasyPosition;
   mantraPosition: PlayerMantraPosition;
   isArchived?: boolean;
-  team?: TeamShort;
+  team?: TeamShort | null;
+  instagramUrl?: string;
+  transfermarktUrl?: string;
 } 

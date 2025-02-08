@@ -29,7 +29,9 @@ const PlayerSchema: Schema = new Schema({
     required: true 
   },
   isArchived: { type: Boolean, default: false },
-  team: { type: TeamShortSchema, required: false }
+  team: { type: TeamShortSchema, required: false },
+  instagramUrl: { type: String },
+  transfermarktUrl: { type: String }
 }, {
   timestamps: true
 });

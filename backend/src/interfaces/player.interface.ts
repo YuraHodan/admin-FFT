@@ -12,4 +12,6 @@ export interface IPlayer {
   mantraPosition: PlayerMantraPosition;
   isArchived?: boolean;
   team?: ITeamShort;
+  instagramUrl?: string;
+  transfermarktUrl?: string;
 } 

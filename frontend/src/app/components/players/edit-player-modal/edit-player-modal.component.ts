@@ -60,7 +60,9 @@ export class EditPlayerModalComponent implements OnInit {
       country: [selectedCountry],
       fantasyPosition: [this.player.fantasyPosition, Validators.required],
       mantraPosition: [this.player.mantraPosition],
-      team: [currentTeam]
+      team: [currentTeam],
+      instagramUrl: [this.player.instagramUrl],
+      transfermarktUrl: [this.player.transfermarktUrl]
     });
 
     if (this.player.photo) {
