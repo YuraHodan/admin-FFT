@@ -9,6 +9,9 @@ import { FormationsComponent } from './pages/formations/formations.component';
 import { FormulasComponent } from './pages/formulas/formulas.component';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 import { CardsComponent } from './pages/cards/cards.component';
+import { MantraComponent } from './pages/formations/mantra/mantra.component';
+import { FantasyComponent } from './pages/formations/fantasy/fantasy.component';
+import { RealComponent } from './pages/formations/real/real.component';
 
 export const routes: Routes = [
   {
@@ -34,7 +37,24 @@ export const routes: Routes = [
   },
   {
     path: 'formations',
-    component: FormationsComponent
+    children: [
+      {
+        path: '',
+        component: FormationsComponent
+      },
+      {
+        path: 'mantra',
+        component: MantraComponent
+      },
+      {
+        path: 'fantasy',
+        component: FantasyComponent
+      },
+      {
+        path: 'real',
+        component: RealComponent
+      }
+    ]
   },
   {
     path: 'formulas',

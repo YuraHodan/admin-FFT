@@ -6,10 +6,18 @@
   </div>
   <ul class="nav flex-column">
     <li class="nav-item" *ngFor="let item of menuItems">
-      <a class="nav-link" [routerLink]="item.link" routerLinkActive="active">
+      <a class="nav-link" [routerLink]="item.link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         <i [class]="item.icon"></i>
         <span *ngIf="isExpanded">{{ item.title }}</span>
       </a>
+      <ul class="nav flex-column sub-menu" *ngIf="item.subItems && isExpanded">
+        <li class="nav-item" *ngFor="let subItem of item.subItems">
+          <a class="nav-link" [routerLink]="subItem.link" routerLinkActive="active">
+            <i [class]="subItem.icon"></i>
+            <span>{{ subItem.title }}</span>
+          </a>
+        </li>
+      </ul>
     </li>
   </ul>
 </div>

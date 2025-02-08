@@ -1,0 +1,35 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col">
+      <div class="d-flex align-items-center gap-3">
+        <h2 class="mb-0">Mantra Formations</h2>
+        <button class="btn btn-primary rounded-circle add-btn" (click)="onAdd()">
+          <i class="bi bi-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Formation Name</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-outline-primary" (click)="onEdit()">Edit</button>
+              <button class="btn btn-outline-warning" (click)="onArchive()">Archive</button>
+              <button class="btn btn-outline-danger" (click)="onDelete()">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

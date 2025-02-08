@@ -104,3 +104,16 @@
     font-size: 1.2rem;
   }
 }
+
+.sub-menu {
+  padding-left: 2rem;
+  
+  .nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    
+    i {
+      font-size: 0.8rem;
+    }
+  }
+}
