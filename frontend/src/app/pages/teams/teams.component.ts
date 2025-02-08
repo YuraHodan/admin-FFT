@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Team } from '../../models/team.interface';
 import { EditTeamModalComponent } from '../../components/teams/edit-team-modal/edit-team-modal.component';
@@ -7,22 +8,30 @@ import { ConfirmDeleteModalComponent } from '../../components/teams/confirm-dele
 import { ConfirmArchiveModalComponent } from '../../components/teams/confirm-archive-modal/confirm-archive-modal.component';
 import { TeamsService } from '../../services/teams.service';
 import { Observable, firstValueFrom } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-teams',
   standalone: true,
-  imports: [CommonModule, NgbModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgbModule
+  ],
   templateUrl: './teams.component.html',
   styleUrl: './teams.component.scss'
 })
 export class TeamsComponent implements OnInit {
   teams$: Observable<Team[]>;
+  nameFilter: string = '';
+  filteredTeams$: Observable<Team[]>;
 
   constructor(
     private modalService: NgbModal, 
     private teamsService: TeamsService
   ) {
     this.teams$ = this.teamsService.teams$;
+    this.filteredTeams$ = this.teams$;  // Initial value
   }
 
   ngOnInit(): void {
@@ -82,5 +91,17 @@ export class TeamsComponent implements OnInit {
         this.teamsService.deleteTeam(team.id).subscribe();
       }
     });
+  }
+
+  applyFilters(): void {
+    this.filteredTeams$ = this.teams$.pipe(
+      map(teams => {
+        return teams.filter(team => {
+          const nameMatch = !this.nameFilter || 
+            team.name.toLowerCase().includes(this.nameFilter.toLowerCase());
+          return nameMatch;
+        });
+      })
+    );
   }
 }

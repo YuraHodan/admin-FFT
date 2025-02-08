@@ -10,6 +10,23 @@
     </div>
   </div>
 
+  <!-- Add filter -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-search"></i>
+        </span>
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Search by team name..."
+          [(ngModel)]="nameFilter"
+          (ngModelChange)="applyFilters()">
+      </div>
+    </div>
+  </div>
+
   <div class="table-responsive">
     <table class="teams-table">
       <thead>
@@ -21,7 +38,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let team of teams$ | async" [class.archived-team]="team.isArchived">
+        <tr *ngFor="let team of filteredTeams$ | async" [class.archived-team]="team.isArchived">
           <td>
             <img [src]="team.logo" alt="Team logo" class="team-logo rounded-circle">
           </td>
