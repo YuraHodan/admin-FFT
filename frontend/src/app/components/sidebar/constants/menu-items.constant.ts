@@ -24,7 +24,14 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     title: 'News',
     icon: 'bi bi-newspaper',
-    link: '/news'
+    link: '/news',
+    subItems: [
+      {
+        title: 'Templates',
+        icon: 'bi bi-circle',
+        link: '/news/templates'
+      }
+    ]
   },
   {
     title: 'Formations',

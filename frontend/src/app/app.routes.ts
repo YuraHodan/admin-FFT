@@ -33,7 +33,16 @@ export const routes: Routes = [
   },
   {
     path: 'news',
-    component: NewsComponent
+    children: [
+      {
+        path: '',
+        component: NewsComponent
+      },
+      {
+        path: 'templates',
+        component: NewsComponent  // тут потім буде TemplatesComponent
+      }
+    ]
   },
   {
     path: 'formations',
