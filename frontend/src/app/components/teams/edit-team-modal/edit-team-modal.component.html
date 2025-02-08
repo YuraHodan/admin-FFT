@@ -29,11 +29,6 @@
     </div>
 
     <div class="mb-3">
-      <div class="d-flex justify-content-between align-items-center mb-2">
-        <h5 class="mb-0">Players</h5>
-        <button type="button" class="btn btn-primary" (click)="onAddPlayer()">Add Player</button>
-      </div>
-      
       <div class="mb-3">
         <input 
           type="text" 
@@ -47,15 +42,11 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let player of filteredPlayers">
             <td>{{ player.firstName }} {{ player.lastName }}</td>
-            <td>
-              <button type="button" class="btn btn-sm btn-outline-danger" (click)="removePlayer(player.id)">Remove</button>
-            </td>
           </tr>
           <tr *ngIf="filteredPlayers.length === 0">
             <td colspan="2" class="text-center">No players found</td>

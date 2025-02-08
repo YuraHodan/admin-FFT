@@ -46,4 +46,27 @@
   i {
     font-size: 1.5rem;
   }
+}
+
+.input-group {
+  .input-group-text {
+    background-color: white;
+    border-right: none;
+  }
+
+  input {
+    border-left: none;
+    
+    &:focus {
+      border-color: #ced4da;
+      box-shadow: none;
+    }
+  }
+}
+
+.form-select {
+  &:focus {
+    border-color: #ced4da;
+    box-shadow: none;
+  }
 } 
