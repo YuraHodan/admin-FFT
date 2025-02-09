@@ -1,0 +1,12 @@
+<div class="modal-header">
+  <h4 class="modal-title">Delete Formation</h4>
+  <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <p>Are you sure you want to delete formation "{{ formation.name }}"?</p>
+  <p class="text-danger">This action cannot be undone.</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancel</button>
+  <button type="button" class="btn btn-danger" (click)="onDelete()">Delete</button>
+</div> 

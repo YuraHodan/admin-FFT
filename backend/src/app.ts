@@ -4,6 +4,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import teamRoutes from './routes/team.routes';
 import playerRoutes from './routes/player.routes';
+import fantasyFormationsRoutes from './routes/formations/fantasy-formations.routes';
+import mantraFormationsRoutes from './routes/formations/mantra-formations.routes';
+import realFormationsRoutes from './routes/formations/real-formations.routes';
 
 dotenv.config();
 
@@ -16,6 +19,9 @@ app.use(express.json());
 // Routes
 app.use('/api/teams', teamRoutes);
 app.use('/api/players', playerRoutes);
+app.use('/api/formations/fantasy', fantasyFormationsRoutes);
+app.use('/api/formations/mantra', mantraFormationsRoutes);
+app.use('/api/formations/real', realFormationsRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/football-manager')
