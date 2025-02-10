@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-schedule',
@@ -9,5 +10,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './schedule.component.scss'
 })
 export class ScheduleComponent {
-  // Component logic here
+  totalTours: number = 38;
+  activeTour: number = 24;
+  postponedTours: number = 2;
+
+  constructor(private router: Router) {}
+
+  onCreateTour(): void {
+    this.router.navigate(['/schedule/tour']);
+  }
 } 

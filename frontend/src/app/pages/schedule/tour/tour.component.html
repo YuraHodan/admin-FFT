@@ -1,0 +1,146 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col">
+      <h2>{{ tourId ? 'Edit Tour ' + tourId : 'Create New Tour' }}</h2>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <!-- Left Column -->
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="number" class="form-label">Tour Number</label>
+          <input 
+            type="number" 
+            class="form-control" 
+            id="number" 
+            formControlName="number"
+            min="1">
+        </div>
+
+        <div class="mb-3">
+          <label for="status" class="form-label">Status</label>
+          <select class="form-select" id="status" formControlName="status">
+            <option *ngFor="let status of tourStatuses" [value]="status">
+              {{ status }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="startDate" class="form-label">Start Date</label>
+          <input 
+            type="date" 
+            class="form-control" 
+            id="startDate" 
+            formControlName="startDate">
+        </div>
+
+        <div class="mb-3">
+          <label for="endDate" class="form-label">End Date</label>
+          <input 
+            type="date" 
+            class="form-control" 
+            id="endDate" 
+            formControlName="endDate">
+        </div>
+      </div>
+    </div>
+
+    <!-- Matches Section -->
+    <div class="matches-section mt-4" formArrayName="matches">
+      <h3 class="mb-3">Matches</h3>
+      
+      <div *ngFor="let match of matches.controls; let i = index" [formGroupName]="i" class="match-item mb-4 p-3 border rounded">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label [for]="'matchDate' + i" class="form-label">Match Date</label>
+              <input 
+                type="datetime-local" 
+                class="form-control" 
+                [id]="'matchDate' + i" 
+                formControlName="startDate">
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label [for]="'matchStatus' + i" class="form-label">Match Status</label>
+              <select class="form-select" [id]="'matchStatus' + i" formControlName="status">
+                <option *ngFor="let status of matchStatuses" [value]="status">
+                  {{ status }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row align-items-end">
+          <!-- Home Team -->
+          <div class="col-md-5" formGroupName="homeTeam">
+            <div class="mb-3">
+              <label [for]="'homeTeam' + i" class="form-label">Home Team</label>
+              <select class="form-select" [id]="'homeTeam' + i" formControlName="teamId">
+                <option value="">Select team</option>
+                <option *ngFor="let team of getAvailableTeams(i, true) | async" [value]="team.id">
+                  {{ team.name }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label [for]="'homeGoals' + i" class="form-label">Goals</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                [id]="'homeGoals' + i" 
+                formControlName="goals"
+                min="0">
+            </div>
+          </div>
+
+          <div class="col-md-2 text-center">
+            <h4 class="mb-3">VS</h4>
+          </div>
+
+          <!-- Away Team -->
+          <div class="col-md-5" formGroupName="awayTeam">
+            <div class="mb-3">
+              <label [for]="'awayTeam' + i" class="form-label">Away Team</label>
+              <select class="form-select" [id]="'awayTeam' + i" formControlName="teamId">
+                <option value="">Select team</option>
+                <option *ngFor="let team of getAvailableTeams(i, false) | async" [value]="team.id">
+                  {{ team.name }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label [for]="'awayGoals' + i" class="form-label">Goals</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                [id]="'awayGoals' + i" 
+                formControlName="goals"
+                min="0">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col">
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="!form.valid">
+          {{ tourId ? 'Update' : 'Create' }} Tour
+        </button>
+      </div>
+    </div>
+  </form>
+</div> 

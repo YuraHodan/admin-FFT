@@ -1,8 +1,41 @@
 <div class="container-fluid">
-  <div class="row">
+  <div class="row mb-4">
     <div class="col">
-      <h2>Schedule</h2>
-      <!-- Component content here -->
+      <div class="d-flex align-items-center gap-3">
+        <h2 class="mb-0">Schedule</h2>
+        <button class="btn btn-primary rounded-circle add-btn" (click)="onCreateTour()">
+          <i class="bi bi-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Total Tours</h5>
+          <p class="card-text display-4">{{ totalTours }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Active Tour</h5>
+          <p class="card-text display-4">{{ activeTour }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Postponed Tours</h5>
+          <p class="card-text display-4">{{ postponedTours }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </div> 

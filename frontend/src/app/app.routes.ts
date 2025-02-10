@@ -71,7 +71,23 @@ export const routes: Routes = [
   },
   {
     path: 'schedule',
-    component: ScheduleComponent
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/schedule/schedule.component').then((m) => m.ScheduleComponent),
+      },
+      {
+        path: 'tour',
+        loadComponent: () =>
+          import('./pages/schedule/tour/tour.component').then((m) => m.TourComponent),
+      },
+      {
+        path: 'tour/:id',
+        loadComponent: () =>
+          import('./pages/schedule/tour/tour.component').then((m) => m.TourComponent),
+      }
+    ]
   },
   {
     path: 'login',
