@@ -6,13 +6,18 @@
 <div class="modal-body">
   <form [formGroup]="form">
     <div class="mb-3">
-      <label for="name" class="form-label">Name</label>
+      <label for="name" class="form-label">Season Name</label>
       <input 
         type="text" 
         class="form-control" 
         id="name" 
         formControlName="name"
         placeholder="Enter season name">
+      <div 
+        *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+        class="text-danger">
+        Name is required
+      </div>
     </div>
 
     <div class="mb-3">
@@ -32,5 +37,11 @@
 
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancel</button>
-  <button type="button" class="btn btn-primary" (click)="onSave()" [disabled]="!form.valid">Save</button>
+  <button 
+    type="button" 
+    class="btn btn-primary" 
+    (click)="onSave()"
+    [disabled]="!form.valid">
+    Save
+  </button>
 </div> 

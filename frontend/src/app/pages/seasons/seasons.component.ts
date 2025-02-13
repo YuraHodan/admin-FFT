@@ -1,40 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Season } from '../../models/season.interface';
+import { SeasonsService } from '../../services/seasons.service';
 import { EditSeasonModalComponent } from '../../components/seasons/edit-season-modal/edit-season-modal.component';
 import { DeleteSeasonModalComponent } from '../../components/seasons/delete-season-modal/delete-season-modal.component';
 import { DeactivateSeasonModalComponent } from '../../components/seasons/deactivate-season-modal/deactivate-season-modal.component';
+import { log } from 'console';
 
 @Component({
   selector: 'app-seasons',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    NgbModule,
+    FormsModule
+  ],
   templateUrl: './seasons.component.html',
-  styleUrl: './seasons.component.scss'
+  styleUrls: ['./seasons.component.scss']
 })
-export class SeasonsComponent {
-  seasons: Season[] = [
-    { id: '1', name: 'Season 2023/24', isActive: true },
-    { id: '2', name: 'Season 2022/23', isActive: false },
-  ];
-
-  get activeSeason(): Season | undefined {
-    return this.seasons.find(season => season.isActive);
-  }
+export class SeasonsComponent implements OnInit {
+  seasons: Season[] = [];
+  activeSeason: Season | null = null;
 
   get hasInactiveSeasons(): boolean {
     return this.seasons.some(season => !season.isActive);
   }
 
-  constructor(private modalService: NgbModal) {}
+  constructor(
+    private modalService: NgbModal,
+    private seasonsService: SeasonsService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadSeasons();
+  }
+
+  private loadSeasons(): void {
+    this.seasonsService.loadSeasons().subscribe(seasons => {
+      this.seasons = seasons.sort((a, b) => {
+        if (a.isActive) return -1;
+        if (b.isActive) return 1;
+        return new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime();
+      });
+      this.activeSeason = seasons.find(season => season.isActive) || null;
+    });
+  }
 
   onCreateSeason(): void {
-    const modalRef = this.modalService.open(EditSeasonModalComponent);
+    const modalRef = this.modalService.open(EditSeasonModalComponent, {
+      backdrop: 'static',
+      keyboard: false
+    });
     modalRef.result.then(
       (result: Season) => {
-        console.log('New season:', result);
-        // TODO: Save new season (always inactive by default)
+        if (result) {
+          this.seasonsService.createSeason(result).subscribe(() => {
+            this.loadSeasons();
+          });
+        }
       },
       () => {}
     );
@@ -44,12 +69,45 @@ export class SeasonsComponent {
     if (seasonId) {
       const season = this.seasons.find(s => s.id === seasonId);
       if (season) {
-        const modalRef = this.modalService.open(EditSeasonModalComponent);
+        const modalRef = this.modalService.open(EditSeasonModalComponent, {
+          backdrop: 'static',
+          keyboard: false
+        });
         modalRef.componentInstance.season = season;
         modalRef.result.then(
           (result: Season) => {
-            console.log('Updated season:', result);
-            // TODO: Update season (without changing active status)
+            if (result) {
+              this.seasonsService.updateSeason(seasonId, result).subscribe(() => {
+                this.loadSeasons();
+              });
+            }
+          },
+          () => {}
+        );
+      }
+    }
+  }
+
+  onDeactivateSeason(seasonId: string | undefined): void {
+    if (seasonId) {
+      const currentSeason = this.seasons.find(s => s.id === seasonId);
+      if (currentSeason) {
+        const availableSeasons = this.seasons.filter(s => !s.isActive);
+        
+        const modalRef = this.modalService.open(DeactivateSeasonModalComponent, {
+          backdrop: 'static',
+          keyboard: false
+        });
+        modalRef.componentInstance.currentSeason = currentSeason;
+        modalRef.componentInstance.availableSeasons = availableSeasons;
+        
+        modalRef.result.then(
+          (result: { newActiveSeason: Season }) => {
+            if (result && result.newActiveSeason) {
+              this.seasonsService.changeActiveSeason(result.newActiveSeason.id!).subscribe(() => {
+                this.loadSeasons();
+              });
+            }
           },
           () => {}
         );
@@ -59,52 +117,36 @@ export class SeasonsComponent {
 
   onSelectActiveSeason(): void {
     const availableSeasons = this.seasons.filter(s => !s.isActive);
-    
     const modalRef = this.modalService.open(DeactivateSeasonModalComponent);
     modalRef.componentInstance.availableSeasons = availableSeasons;
-    // Не передаємо currentSeason, бо його немає
     
     modalRef.result.then(
       (result: { newActiveSeason: Season }) => {
-        console.log('New active season:', result.newActiveSeason);
-        // TODO: Update season status
+        if (result && result.newActiveSeason) {
+          this.seasonsService.changeActiveSeason(result.newActiveSeason.id!).subscribe(() => {
+            this.loadSeasons();
+          });
+        }
       },
       () => {}
     );
   }
 
-  onDeactivateSeason(seasonId: string | undefined): void {
-    if (seasonId) {
-      const currentSeason = this.seasons.find(s => s.id === seasonId);
-      if (currentSeason) {
-        const availableSeasons = this.seasons.filter(s => !s.isActive);
-        
-        const modalRef = this.modalService.open(DeactivateSeasonModalComponent);
-        modalRef.componentInstance.currentSeason = currentSeason;
-        modalRef.componentInstance.availableSeasons = availableSeasons;
-        
-        modalRef.result.then(
-          (result: { deactivatedSeason: Season, newActiveSeason: Season }) => {
-            console.log('Deactivate season:', result.deactivatedSeason);
-            console.log('New active season:', result.newActiveSeason);
-            // TODO: Update both seasons' statuses
-          },
-          () => {}
-        );
-      }
-    }
-  }
-
   onDelete(seasonId: string | undefined): void {
+    console.log(seasonId);
     if (seasonId) {
       const season = this.seasons.find(s => s.id === seasonId);
       if (season) {
-        const modalRef = this.modalService.open(DeleteSeasonModalComponent);
+        const modalRef = this.modalService.open(DeleteSeasonModalComponent, {
+          backdrop: 'static',
+          keyboard: false
+        });
         modalRef.componentInstance.season = season;
         modalRef.result.then(
-          (result: Season) => {
-            console.log('Delete season:', result);
-            // TODO: Delete season (prevent if active)
+          () => {
+            this.seasonsService.deleteSeason(seasonId).subscribe(() => {
+              this.loadSeasons();
+            });
           },
           () => {}
         );

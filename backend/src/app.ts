@@ -7,6 +7,7 @@ import playerRoutes from './routes/player.routes';
 import fantasyFormationsRoutes from './routes/formations/fantasy-formations.routes';
 import mantraFormationsRoutes from './routes/formations/mantra-formations.routes';
 import realFormationsRoutes from './routes/formations/real-formations.routes';
+import seasonRoutes from './routes/season.routes';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use('/api/players', playerRoutes);
 app.use('/api/formations/fantasy', fantasyFormationsRoutes);
 app.use('/api/formations/mantra', mantraFormationsRoutes);
 app.use('/api/formations/real', realFormationsRoutes);
+app.use('/api/seasons', seasonRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/football-manager')
