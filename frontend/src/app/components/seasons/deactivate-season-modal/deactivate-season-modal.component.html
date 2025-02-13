@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ currentSeason ? 'Change' : 'Set' }} Active Season</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+  <ng-container *ngIf="currentSeason">
+    <p>You are about to deactivate the current active season: <strong>"{{ currentSeason.name }}"</strong></p>
+  </ng-container>
+  
+  <form [formGroup]="form">
+    <div class="mb-3">
+      <label for="newActiveSeason" class="form-label">
+        {{ currentSeason ? 'Select New Active Season' : 'Select Season to Activate' }}
+      </label>
+      <select 
+        class="form-select" 
+        id="newActiveSeason" 
+        formControlName="newActiveSeasonId">
+        <option value="">Choose a season...</option>
+        <option *ngFor="let season of availableSeasons" [value]="season.id">
+          {{ season.name }}
+        </option>
+      </select>
+    </div>
+  </form>
+
+  <div class="alert alert-info" role="alert">
+    <i class="bi bi-info-circle me-2"></i>
+    {{ currentSeason 
+      ? 'You must select a new active season before deactivating the current one.'
+      : 'Select a season to make it active.' 
+    }}
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancel</button>
+  <button 
+    type="button" 
+    class="btn btn-primary" 
+    (click)="onConfirm()"
+    [disabled]="!form.valid">
+    Confirm
+  </button>
+</div> 

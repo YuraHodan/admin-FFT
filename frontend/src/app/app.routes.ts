@@ -102,6 +102,11 @@ export const routes: Routes = [
     component: CardsComponent
   },
   {
+    path: 'seasons',
+    loadComponent: () =>
+      import('./pages/seasons/seasons.component').then((m) => m.SeasonsComponent),
+  },
+  {
     path: '**',
     redirectTo: '/404'
   }

@@ -1,0 +1,86 @@
+<div class="container-fluid">
+  <!-- Active Season Section -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Active Season</h4>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              {{ activeSeason?.name || 'No active season' }}
+            </h5>
+            <ng-container *ngIf="activeSeason; else noActiveSeason">
+              <button 
+                class="btn btn-outline-warning" 
+                (click)="onDeactivateSeason(activeSeason.id)">
+                Deactivate Season
+              </button>
+            </ng-container>
+            <ng-template #noActiveSeason>
+              <button 
+                class="btn btn-outline-success" 
+                (click)="onSelectActiveSeason()"
+                [disabled]="!hasInactiveSeasons">
+                Set Active Season
+              </button>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Seasons Section -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="d-flex align-items-center gap-3">
+        <h2 class="mb-0">All Seasons</h2>
+        <button class="btn btn-primary rounded-circle add-btn" (click)="onCreateSeason()">
+          <i class="bi bi-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let season of seasons">
+              <td>{{ season.name }}</td>
+              <td>
+                <span class="badge" [class.bg-success]="season.isActive" [class.bg-secondary]="!season.isActive">
+                  {{ season.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button class="btn btn-outline-primary" (click)="onEditSeason(season.id)">
+                    Edit
+                  </button>
+                  <button 
+                    class="btn btn-outline-danger" 
+                    (click)="onDelete(season.id)"
+                    [disabled]="season.isActive"
+                    [title]="season.isActive ? 'Cannot delete active season' : 'Delete season'">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div> 

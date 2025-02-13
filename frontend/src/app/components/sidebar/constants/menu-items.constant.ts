@@ -69,5 +69,10 @@ export const MENU_ITEMS: MenuItem[] = [
     title: 'Cards',
     icon: 'bi bi-card-text',
     link: '/cards'
+  },
+  {
+    title: 'Seasons',
+    icon: 'bi bi-trophy',
+    link: '/seasons'
   }
 ]; 
