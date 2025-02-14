@@ -1,16 +1,19 @@
 import { Match } from './match.interface';
 
+export enum TourStatus {
+  ACTIVE = 'ACTIVE',
+  POSTPONED = 'POSTPONED',
+  COMPLETED = 'COMPLETED'
+}
+
 export interface Tour {
   id?: string;
   number: number;
   startDate: Date;
   endDate: Date;
   status: TourStatus;
+  seasonId: string;
   matches: Match[];
-}
-
-export enum TourStatus {
-  ACTIVE = 'ACTIVE',
-  POSTPONED = 'POSTPONED',
-  COMPLETED = 'COMPLETED'
+  createdAt?: Date;
+  updatedAt?: Date;
 } 

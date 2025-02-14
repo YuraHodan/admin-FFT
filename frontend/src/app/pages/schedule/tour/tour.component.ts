@@ -7,6 +7,7 @@ import { Match, MatchStatus, TeamType } from '../../../models/match.interface';
 import { TeamsService } from '../../../services/teams.service';
 import { Team } from '../../../models/team.interface';
 import { Observable, map } from 'rxjs';
+import { ToursService } from '../../../services/tours.service';
 
 @Component({
   selector: 'app-tour',
@@ -26,7 +27,8 @@ export class TourComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private teamsService: TeamsService
+    private teamsService: TeamsService,
+    private toursService: ToursService
   ) {
     this.teams$ = this.teamsService.teams$;
     this.activeTeams$ = this.teams$.pipe(
@@ -74,9 +76,26 @@ export class TourComponent implements OnInit {
     return this.form.get('matches') as FormArray;
   }
 
+  private matchDateValidator(group: FormGroup) {
+    const startDate = group.parent?.parent?.get('startDate')?.value;
+    const endDate = group.parent?.parent?.get('endDate')?.value;
+    const matchDate = group.get('date')?.value;
+
+    if (startDate && endDate && matchDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const match = new Date(matchDate);
+
+      if (match < start || match > end) {
+        return { dateOutOfRange: true };
+      }
+    }
+    return null;
+  }
+
   createMatchForm() {
     return this.fb.group({
-      startDate: ['', Validators.required],
+      date: ['', [Validators.required]],
       status: [{ value: MatchStatus.NORMAL, disabled: !this.tourId }, Validators.required],
       homeTeam: this.fb.group({
         teamId: ['', Validators.required],
@@ -88,7 +107,7 @@ export class TourComponent implements OnInit {
         type: [TeamType.AWAY],
         goals: [{ value: 0, disabled: !this.tourId }]
       })
-    });
+    }, { validator: this.matchDateValidator });
   }
 
   loadTeams(): void {
@@ -97,22 +116,26 @@ export class TourComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      const formValue = this.form.getRawValue();
-      const tourData: Tour = {
-        ...formValue,
-        startDate: new Date(formValue.startDate),
-        endDate: new Date(formValue.endDate),
-        matches: formValue.matches.map((match: any) => ({
-          ...match,
-          startDate: new Date(match.startDate)
-        }))
-      };
+      const tourData: Tour = this.form.value;
+      
+      // Конвертуємо string дати в Date об'єкти
+      tourData.startDate = new Date(tourData.startDate);
+      tourData.endDate = new Date(tourData.endDate);
+      tourData.matches = tourData.matches.map(match => ({
+        ...match,
+        date: new Date(match.date)
+      }));
 
-      if (this.tourId) {
-        console.log('Update tour:', tourData);
-      } else {
-        console.log('Create tour:', tourData);
-      }
+      this.toursService.createTour(tourData).subscribe({
+        next: (tour) => {
+          console.log('Tour created:', tour);
+          // Тут можна додати навігацію або інші дії після успішного створення
+        },
+        error: (error) => {
+          console.error('Error creating tour:', error);
+          // Тут можна додати обробку помилок
+        }
+      });
     } else {
       console.log('Form is invalid:', this.form.errors);
     }

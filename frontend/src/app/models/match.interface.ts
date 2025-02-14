@@ -1,20 +1,25 @@
+export enum MatchStatus {
+  NORMAL = 'NORMAL',
+  SCHEDULED = 'SCHEDULED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  POSTPONED = 'POSTPONED',
+  CANCELLED = 'CANCELLED'
+}
+
 export interface Match {
-  id?: string;
-  startDate: Date;
+  date: Date;
   status: MatchStatus;
-  homeTeam: MatchTeam;
-  awayTeam: MatchTeam;
+  homeTeam: string;
+  awayTeam: string;
+  homeGoals?: number;
+  awayGoals?: number;
 }
 
 export interface MatchTeam {
   teamId: string;
   type: TeamType;
   goals?: number;
-}
-
-export enum MatchStatus {
-  NORMAL = 'NORMAL',
-  POSTPONED = 'POSTPONED'
 }
 
 export enum TeamType {

@@ -10,6 +10,22 @@
     </div>
   </div>
 
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Current Season</h5>
+          <div *ngIf="activeSeason; else noActiveSeason">
+            <h2>{{ activeSeason.name }}</h2>
+          </div>
+          <ng-template #noActiveSeason>
+            <p class="text-muted">No active season selected</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-4 mb-3">
       <div class="card text-center">

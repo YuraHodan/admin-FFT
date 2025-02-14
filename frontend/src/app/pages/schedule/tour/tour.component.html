@@ -34,7 +34,7 @@
         <div class="mb-3">
           <label for="startDate" class="form-label">Start Date</label>
           <input 
-            type="date" 
+            type="datetime-local" 
             class="form-control" 
             id="startDate" 
             formControlName="startDate">
@@ -43,7 +43,7 @@
         <div class="mb-3">
           <label for="endDate" class="form-label">End Date</label>
           <input 
-            type="date" 
+            type="datetime-local" 
             class="form-control" 
             id="endDate" 
             formControlName="endDate">
@@ -64,7 +64,14 @@
                 type="datetime-local" 
                 class="form-control" 
                 [id]="'matchDate' + i" 
-                formControlName="startDate">
+                formControlName="date"
+                [min]="form.get('startDate')?.value"
+                [max]="form.get('endDate')?.value">
+              <div 
+                *ngIf="match.errors?.['dateOutOfRange']" 
+                class="text-danger small">
+                Match date must be between tour start and end dates
+              </div>
             </div>
           </div>
           
