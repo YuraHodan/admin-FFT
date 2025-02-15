@@ -72,7 +72,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let tour of tours">
+                <tr *ngFor="let tour of tours" 
+                    [routerLink]="['/schedule/tour', tour.id]" 
+                    style="cursor: pointer"
+                    class="tour-row">
                   <td>{{ tour.number }}</td>
                   <td>{{ tour.startDate | date:'medium' }}</td>
                   <td>{{ tour.endDate | date:'medium' }}</td>

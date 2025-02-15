@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { SeasonsService } from '../../services/seasons.service';
 import { Season } from '../../models/season.interface';
 import { ToursService } from '../../services/tours.service';
@@ -9,7 +9,7 @@ import { Tour } from '../../models/tour.interface';
 @Component({
   selector: 'app-schedule',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.scss'
 })
@@ -17,7 +17,11 @@ export class ScheduleComponent implements OnInit {
   activeSeason: Season | null = null;
   tours: Tour[] = [];
 
-  constructor(private router: Router, private seasonsService: SeasonsService, private toursService: ToursService) {}
+  constructor(
+    private router: Router,
+    private seasonsService: SeasonsService,
+    private toursService: ToursService
+  ) {}
 
   ngOnInit(): void {
     this.loadActiveSeason();
