@@ -2,6 +2,7 @@ import { Match } from './match.interface';
 
 export enum TourStatus {
   ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
   POSTPONED = 'POSTPONED',
   COMPLETED = 'COMPLETED'
 }

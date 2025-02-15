@@ -31,7 +31,7 @@
       <div class="card text-center">
         <div class="card-body">
           <h5 class="card-title">Total Tours</h5>
-          <p class="card-text display-4">{{ totalTours }}</p>
+          <p class="card-text display-4">{{ tours.length }}</p>
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@
       <div class="card text-center">
         <div class="card-body">
           <h5 class="card-title">Active Tour</h5>
-          <p class="card-text display-4">{{ activeTour }}</p>
+          <p class="card-text display-4">{{ activeTourNumber }}</p>
         </div>
       </div>
     </div>
@@ -49,7 +49,49 @@
       <div class="card text-center">
         <div class="card-body">
           <h5 class="card-title">Postponed Tours</h5>
-          <p class="card-text display-4">{{ postponedTours }}</p>
+          <p class="card-text display-4">{{ postponedToursCount }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Tours</h5>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Tour #</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Status</th>
+                  <th>Matches</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let tour of tours">
+                  <td>{{ tour.number }}</td>
+                  <td>{{ tour.startDate | date:'medium' }}</td>
+                  <td>{{ tour.endDate | date:'medium' }}</td>
+                  <td>
+                    <span [class]="'badge ' + (
+                      tour.status === 'ACTIVE' ? 'bg-success' : 
+                      tour.status === 'POSTPONED' ? 'bg-warning' : 
+                      tour.status === 'INACTIVE' ? 'bg-secondary' : 'bg-info')">
+                      {{ tour.status }}
+                    </span>
+                  </td>
+                  <td>{{ tour.matches.length }}</td>
+                </tr>
+                <tr *ngIf="tours.length === 0">
+                  <td colspan="5" class="text-center">No tours found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

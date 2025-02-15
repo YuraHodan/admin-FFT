@@ -36,10 +36,13 @@ export class TourComponent implements OnInit {
     );
     
     this.form = this.fb.group({
-      number: ['', [Validators.required, Validators.min(1)]],
+      number: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      status: [TourStatus.ACTIVE, Validators.required],
+      status: [{ 
+        value: TourStatus.INACTIVE, 
+        disabled: true 
+      }],
       matches: this.fb.array([])
     });
   }

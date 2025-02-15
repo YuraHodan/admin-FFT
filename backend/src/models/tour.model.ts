@@ -24,6 +24,13 @@ export interface ITour {
   updatedAt?: Date;
 }
 
+export enum TourStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',  // Додаємо новий статус
+  POSTPONED = 'POSTPONED',
+  COMPLETED = 'COMPLETED'
+}
+
 const teamSchema = new Schema({
   teamId: {
     type: Schema.Types.ObjectId,
