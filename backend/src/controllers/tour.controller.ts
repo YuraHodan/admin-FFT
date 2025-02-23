@@ -27,10 +27,20 @@ export const createTour = async (req: Request, res: Response): Promise<void> => 
 
 export const getTours = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tours = await Tour.find().sort({ number: 1 });
-    res.json(tours);
+    // Знаходимо активний сезон
+    const activeSeason = await Season.findOne({ isActive: true });
+    if (!activeSeason) {
+      res.status(400).json({ message: 'No active season found' });
+      return;
+    }
+
+    // Отримуємо тури тільки активного сезону
+    const tours = await Tour.find({ seasonId: activeSeason.id })
+      .sort({ number: 1 });  // Сортуємо за номером туру
+    
+    res.status(200).json(tours);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching tours', error });
+    res.status(400).json({ message: 'Error getting tours', error });
   }
 };
 
