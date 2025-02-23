@@ -70,8 +70,44 @@ export class TourComponent implements OnInit {
     });
 
     if (this.tourId) {
-      // TODO: Load tour data
-      // this.loadTour(this.tourId);
+      this.toursService.getTourById(this.tourId).subscribe({
+        next: (tour: Tour) => {
+          // Конвертуємо дати для форми
+          const startDate = new Date(tour.startDate).toISOString().slice(0, 16);
+          const endDate = new Date(tour.endDate).toISOString().slice(0, 16);
+
+          // Патчимо основні дані туру
+          this.form.patchValue({
+            number: tour.number,
+            startDate: startDate,
+            endDate: endDate,
+            status: tour.status
+          });
+
+          // Очищаємо існуючі матчі
+          while (this.matches.length) {
+            this.matches.removeAt(0);
+          }
+
+          // Додаємо матчі з туру
+          tour.matches.forEach(match => {
+            const matchDate = new Date(match.date).toISOString().slice(0, 16);
+            this.matches.push(this.createMatchForm());
+            const lastMatch = this.matches.at(this.matches.length - 1);
+            
+            lastMatch.patchValue({
+              date: matchDate,
+              status: match.status,
+              homeTeam: match.homeTeam,
+              awayTeam: match.awayTeam
+            });
+          });
+        },
+        error: (error) => {
+          console.error('Error loading tour:', error);
+          // TODO: Додати обробку помилок
+        }
+      });
     }
   }
 
