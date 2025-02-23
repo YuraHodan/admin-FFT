@@ -21,7 +21,11 @@
 
         <div class="mb-3">
           <label for="status" class="form-label">Status</label>
-          <select class="form-select" id="status" formControlName="status">
+          <select 
+            class="form-select" 
+            id="status" 
+            formControlName="status"
+            (change)="onStatusChange($event)">
             <option *ngFor="let status of tourStatuses" [value]="status">
               {{ status }}
             </option>
@@ -143,9 +147,18 @@
       <div class="col">
         <button 
           type="submit" 
-          class="btn btn-primary"
+          class="btn btn-primary me-2"
           [disabled]="!form.valid">
           {{ tourId ? 'Update' : 'Create' }} Tour
+        </button>
+
+        <!-- Add Delete button only in edit mode -->
+        <button 
+          *ngIf="isEditMode"
+          type="button" 
+          class="btn btn-danger"
+          (click)="onDelete()">
+          Delete Tour
         </button>
       </div>
     </div>

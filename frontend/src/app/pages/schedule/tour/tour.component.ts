@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Tour, TourStatus } from '../../../models/tour.interface';
 import { Match, MatchStatus, TeamType } from '../../../models/match.interface';
 import { TeamsService } from '../../../services/teams.service';
@@ -27,19 +27,20 @@ export class TourComponent implements OnInit {
   
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private teamsService: TeamsService,
     private toursService: ToursService
   ) {
     this.tourId = this.route.snapshot.paramMap.get('id') || undefined;
-    this.isEditMode = !!this.tourId;  // Спочатку встановлюємо isEditMode
+    this.isEditMode = !!this.tourId;  // Set isEditMode first
     
     this.teams$ = this.teamsService.teams$;
     this.activeTeams$ = this.teams$.pipe(
       map(teams => teams.filter(team => !team.isArchived))
     );
     
-    this.form = this.initForm();  // Потім ініціалізуємо форму
+    this.form = this.initForm();  // Then initialize form
   }
 
   private initForm(): FormGroup {
@@ -49,7 +50,7 @@ export class TourComponent implements OnInit {
       endDate: ['', Validators.required],
       status: [{ 
         value: TourStatus.INACTIVE, 
-        disabled: !this.isEditMode  // disabled тільки якщо не режим редагування
+        disabled: !this.isEditMode  // disabled only if not edit mode
       }],
       matches: this.fb.array([])
     });
@@ -79,11 +80,11 @@ export class TourComponent implements OnInit {
     if (this.tourId) {
       this.toursService.getTourById(this.tourId).subscribe({
         next: (tour: Tour) => {
-          // Конвертуємо дати для форми
+          // Convert dates for form
           const startDate = new Date(tour.startDate).toISOString().slice(0, 16);
           const endDate = new Date(tour.endDate).toISOString().slice(0, 16);
 
-          // Патчимо основні дані туру
+          // Patch main tour data
           this.form.patchValue({
             number: tour.number,
             startDate: startDate,
@@ -91,12 +92,12 @@ export class TourComponent implements OnInit {
             status: tour.status
           });
 
-          // Очищаємо існуючі матчі
+          // Clear existing matches
           while (this.matches.length) {
             this.matches.removeAt(0);
           }
 
-          // Додаємо матчі з туру
+          // Add tour matches
           tour.matches.forEach(match => {
             const matchDate = new Date(match.date).toISOString().slice(0, 16);
             this.matches.push(this.createMatchForm());
@@ -112,7 +113,7 @@ export class TourComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error loading tour:', error);
-          // TODO: Додати обробку помилок
+          // TODO: Add error handling
         }
       });
     }
@@ -167,7 +168,7 @@ export class TourComponent implements OnInit {
         status: this.isEditMode ? this.form.get('status')?.value : TourStatus.INACTIVE
       };
       
-      // Конвертуємо string дати в Date об'єкти
+      // Convert string dates to Date objects
       tourData.startDate = new Date(tourData.startDate);
       tourData.endDate = new Date(tourData.endDate);
       tourData.matches = tourData.matches.map(match => ({
@@ -176,27 +177,27 @@ export class TourComponent implements OnInit {
       }));
 
       if (this.isEditMode && this.tourId) {
-        // Оновлюємо існуючий тур
+        // Update existing tour
         this.toursService.updateTour(this.tourId, tourData).subscribe({
           next: (tour) => {
             console.log('Tour updated:', tour);
-            // TODO: Додати навігацію або інші дії після успішного оновлення
+            this.router.navigate(['/schedule']);
           },
           error: (error) => {
             console.error('Error updating tour:', error);
-            // TODO: Додати обробку помилок
+            // TODO: Add error handling
           }
         });
       } else {
-        // Створюємо новий тур
+        // Create new tour
         this.toursService.createTour(tourData).subscribe({
           next: (tour) => {
             console.log('Tour created:', tour);
-            // TODO: Додати навігацію або інші дії після успішного створення
+            this.router.navigate(['/schedule']);
           },
           error: (error) => {
             console.error('Error creating tour:', error);
-            // TODO: Додати обробку помилок
+            // TODO: Add error handling
           }
         });
       }
@@ -231,5 +232,31 @@ export class TourComponent implements OnInit {
         return teams.filter(team => !selectedTeams.has(String(team.id)));
       })
     );
+  }
+
+  onStatusChange(event: any) {
+    if (event.target.value === TourStatus.ACTIVE) {
+      if (confirm('Making this tour active will deactivate any other active tour. Are you sure?')) {
+        // Continue with status change
+      } else {
+        // Revert to previous value
+        this.form.get('status')?.setValue(TourStatus.INACTIVE);
+      }
+    }
+  }
+
+  onDelete(): void {
+    if (this.tourId && confirm('Are you sure you want to delete this tour? This action cannot be undone.')) {
+      this.toursService.deleteTour(this.tourId).subscribe({
+        next: () => {
+          console.log('Tour deleted successfully');
+          this.router.navigate(['/schedule']);
+        },
+        error: (error) => {
+          console.error('Error deleting tour:', error);
+          // TODO: Add error handling
+        }
+      });
+    }
   }
 } 

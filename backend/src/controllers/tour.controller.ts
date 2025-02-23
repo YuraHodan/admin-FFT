@@ -59,16 +59,27 @@ export const getTourById = async (req: Request, res: Response): Promise<void> =>
 
 export const updateTour = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tour = await Tour.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    const { id } = req.params;
+    const updateData = req.body;
+
+    // Якщо встановлюємо статус ACTIVE
+    if (updateData.status === 'ACTIVE') {
+      // Знаходимо і деактивуємо поточний активний тур
+      await Tour.findOneAndUpdate(
+        { status: 'ACTIVE' }, 
+        { status: 'INACTIVE' }
+      );
+    }
+
+    // Оновлюємо поточний тур
+    const tour = await Tour.findByIdAndUpdate(id, updateData, { new: true });
+    
     if (!tour) {
       res.status(404).json({ message: 'Tour not found' });
       return;
     }
-    res.json(tour);
+
+    res.status(200).json(tour);
   } catch (error) {
     res.status(400).json({ message: 'Error updating tour', error });
   }
@@ -76,14 +87,18 @@ export const updateTour = async (req: Request, res: Response): Promise<void> => 
 
 export const deleteTour = async (req: Request, res: Response): Promise<void> => {
   try {
-    const tour = await Tour.findByIdAndDelete(req.params.id);
+    const { id } = req.params;
+    
+    const tour = await Tour.findByIdAndDelete(id);
+    
     if (!tour) {
       res.status(404).json({ message: 'Tour not found' });
       return;
     }
-    res.status(204).send();
+
+    res.status(200).json({ message: 'Tour deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting tour', error });
+    res.status(400).json({ message: 'Error deleting tour', error });
   }
 };
 
