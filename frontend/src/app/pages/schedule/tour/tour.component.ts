@@ -18,11 +18,12 @@ import { ToursService } from '../../../services/tours.service';
 })
 export class TourComponent implements OnInit {
   tourId?: string;
-  form: FormGroup;
+  form!: FormGroup;
   tourStatuses = Object.values(TourStatus);
   matchStatuses = Object.values(MatchStatus);
   teams$: Observable<Team[]>;
   activeTeams$: Observable<Team[]>;
+  isEditMode: boolean = false;
   
   constructor(
     private route: ActivatedRoute,
@@ -30,25 +31,31 @@ export class TourComponent implements OnInit {
     private teamsService: TeamsService,
     private toursService: ToursService
   ) {
+    this.tourId = this.route.snapshot.paramMap.get('id') || undefined;
+    this.isEditMode = !!this.tourId;  // Спочатку встановлюємо isEditMode
+    
     this.teams$ = this.teamsService.teams$;
     this.activeTeams$ = this.teams$.pipe(
       map(teams => teams.filter(team => !team.isArchived))
     );
     
-    this.form = this.fb.group({
+    this.form = this.initForm();  // Потім ініціалізуємо форму
+  }
+
+  private initForm(): FormGroup {
+    return this.fb.group({
       number: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       status: [{ 
         value: TourStatus.INACTIVE, 
-        disabled: true 
+        disabled: !this.isEditMode  // disabled тільки якщо не режим редагування
       }],
       matches: this.fb.array([])
     });
   }
 
   ngOnInit() {
-    this.tourId = this.route.snapshot.paramMap.get('id') || undefined;
     this.loadTeams();
     
     // Subscribe to active teams to create initial matches
@@ -155,7 +162,10 @@ export class TourComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      const tourData: Tour = this.form.value;
+      const tourData: Tour = {
+        ...this.form.value,
+        status: this.isEditMode ? this.form.get('status')?.value : TourStatus.INACTIVE
+      };
       
       // Конвертуємо string дати в Date об'єкти
       tourData.startDate = new Date(tourData.startDate);
@@ -165,16 +175,31 @@ export class TourComponent implements OnInit {
         date: new Date(match.date)
       }));
 
-      this.toursService.createTour(tourData).subscribe({
-        next: (tour) => {
-          console.log('Tour created:', tour);
-          // Тут можна додати навігацію або інші дії після успішного створення
-        },
-        error: (error) => {
-          console.error('Error creating tour:', error);
-          // Тут можна додати обробку помилок
-        }
-      });
+      if (this.isEditMode && this.tourId) {
+        // Оновлюємо існуючий тур
+        this.toursService.updateTour(this.tourId, tourData).subscribe({
+          next: (tour) => {
+            console.log('Tour updated:', tour);
+            // TODO: Додати навігацію або інші дії після успішного оновлення
+          },
+          error: (error) => {
+            console.error('Error updating tour:', error);
+            // TODO: Додати обробку помилок
+          }
+        });
+      } else {
+        // Створюємо новий тур
+        this.toursService.createTour(tourData).subscribe({
+          next: (tour) => {
+            console.log('Tour created:', tour);
+            // TODO: Додати навігацію або інші дії після успішного створення
+          },
+          error: (error) => {
+            console.error('Error creating tour:', error);
+            // TODO: Додати обробку помилок
+          }
+        });
+      }
     } else {
       console.log('Form is invalid:', this.form.errors);
     }
