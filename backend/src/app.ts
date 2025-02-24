@@ -4,9 +4,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import teamRoutes from './routes/team.routes';
 import playerRoutes from './routes/player.routes';
-import fantasyFormationsRoutes from './routes/formations/fantasy-formations.routes';
-import mantraFormationsRoutes from './routes/formations/mantra-formations.routes';
-import realFormationsRoutes from './routes/formations/real-formations.routes';
 import seasonRoutes from './routes/season.routes';
 import tourRoutes from './routes/tour.routes';
 
@@ -21,9 +18,6 @@ app.use(express.json());
 // Routes
 app.use('/api/teams', teamRoutes);
 app.use('/api/players', playerRoutes);
-app.use('/api/formations/fantasy', fantasyFormationsRoutes);
-app.use('/api/formations/mantra', mantraFormationsRoutes);
-app.use('/api/formations/real', realFormationsRoutes);
 app.use('/api/seasons', seasonRoutes);
 app.use('/api/tours', tourRoutes);
 
