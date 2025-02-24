@@ -2,7 +2,41 @@
   <div class="row">
     <div class="col">
       <h2>Formations</h2>
-      <!-- Component content here -->
+      
+      <div class="row mt-4">
+        <!-- Formation List -->
+        <div class="col-md-3">
+          <div class="list-group">
+            <button 
+              *ngFor="let formation of formations"
+              class="list-group-item list-group-item-action"
+              [class.active]="selectedFormation?.id === formation.id"
+              (click)="selectFormation(formation)">
+              {{ formation.name }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Formation Display -->
+        <div class="col-md-9" *ngIf="selectedFormation">
+          <div class="card">
+            <div class="card-header">
+              <h4>{{ selectedFormation.name }}</h4>
+            </div>
+            <div class="card-body">
+              <div class="formation-field">
+                <!-- We'll style this to look like a football field -->
+                <div 
+                  *ngFor="let position of selectedFormation.positions" 
+                  class="position-marker"
+                  [attr.data-position]="position.shortName">
+                  {{ position.shortName }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div> 
