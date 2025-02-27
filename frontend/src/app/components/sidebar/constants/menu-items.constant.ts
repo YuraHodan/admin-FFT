@@ -39,19 +39,9 @@ export const MENU_ITEMS: MenuItem[] = [
     link: '/formations'
   },
   {
-    title: 'Formulas',
-    icon: 'bi bi-calculator',
-    link: '/formulas'
-  },
-  {
     title: 'Schedule',
     icon: 'bi bi-calendar3',
     link: '/schedule'
-  },
-  {
-    title: 'Cards',
-    icon: 'bi bi-card-text',
-    link: '/cards'
   },
   {
     title: 'Seasons',
