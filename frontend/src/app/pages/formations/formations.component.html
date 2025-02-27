@@ -24,14 +24,39 @@
               <h4>{{ selectedFormation.name }}</h4>
             </div>
             <div class="card-body">
-              <div class="formation-field">
-                <!-- We'll style this to look like a football field -->
-                <div 
-                  *ngFor="let position of selectedFormation.positions" 
-                  class="position-marker"
-                  [attr.data-position]="position.shortName">
-                  {{ position.shortName }}
-                </div>
+              <div class="football-field">
+                <ul class="formation-layout">
+                  <!-- Forwards -->
+                  <li class="formation-row forwards">
+                    <div class="player" *ngFor="let pos of getPositionsByType('forwards')">
+                      {{ pos.shortName }}
+                    </div>
+                  </li>
+                  <!-- Attacking Midfielders -->
+                  <li class="formation-row attacking-midfielders">
+                    <div class="player" *ngFor="let pos of getPositionsByType('attacking-midfielders')">
+                      {{ pos.shortName }}
+                    </div>
+                  </li>
+                  <!-- Midfielders -->
+                  <li class="formation-row midfielders">
+                    <div class="player" *ngFor="let pos of getPositionsByType('midfielders')">
+                      {{ pos.shortName }}
+                    </div>
+                  </li>
+                  <!-- Defenders -->
+                  <li class="formation-row defenders">
+                    <div class="player" *ngFor="let pos of getPositionsByType('defenders')">
+                      {{ pos.shortName }}
+                    </div>
+                  </li>
+                  <!-- Goalkeeper -->
+                  <li class="formation-row goalkeeper">
+                    <div class="player" *ngFor="let pos of getPositionsByType('goalkeeper')">
+                      {{ pos.shortName }}
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
