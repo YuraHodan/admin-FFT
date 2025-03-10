@@ -1,0 +1,26 @@
+<div class="modal-header" [ngClass]="noteType.toLowerCase()">
+  <h4 class="modal-title">{{ note ? 'Edit' : 'Add' }} {{ getNoteTypeName(noteType) }}</h4>
+  <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="noteForm">
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input type="text" class="form-control" formControlName="title">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      <textarea class="form-control" rows="3" formControlName="description"></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">End Date</label>
+      <input type="date" class="form-control" formControlName="endDate">
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancel</button>
+  <button type="button" class="btn btn-primary" (click)="onSave()" [disabled]="!noteForm.valid">
+    {{ note ? 'Update' : 'Add' }}
+  </button>
+</div> 

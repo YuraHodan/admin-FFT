@@ -1,0 +1,35 @@
+:host {
+  display: block;
+}
+
+.modal-header {
+  &.injury {
+    border-color: var(--bs-warning);
+    background-color: var(--bs-warning);
+    color: white;
+  }
+  
+  &.red-card {
+    border-color: var(--bs-danger);
+    background-color: var(--bs-danger);
+    color: white;
+  }
+  
+  &.disqualification {
+    border-color: var(--bs-dark);
+    background-color: var(--bs-dark);
+    color: white;
+  }
+  
+  &.personal {
+    border-color: var(--bs-info);
+    background-color: var(--bs-info);
+    color: white;
+  }
+}
+
+.form-control, .form-check-input {
+  &.ng-invalid.ng-touched {
+    border-color: var(--bs-danger);
+  }
+} 

@@ -8,11 +8,12 @@ export enum PlayerNoteType {
 export interface PlayerNote {
   id: string;
   playerId: string;
-  type: PlayerNoteType;
+  title: string;
   description: string;
+  type: PlayerNoteType;
   startDate: Date;
   endDate: Date;
-  isActive: boolean;
+  isActive?: boolean;
   createdAt: Date;
   updatedAt?: Date;
 } 

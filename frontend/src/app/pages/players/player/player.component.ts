@@ -11,6 +11,7 @@ import { Country } from '../../../models/country.interface';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PlayerNotesService } from '../../../services/player-notes.service';
 import { PlayerNote, PlayerNoteType } from '../../../models/player-note.interface';
+import { PlayerNoteModalComponent } from '../../../components/player-notes/player-note-modal/player-note-modal.component';
 
 @Component({
   selector: 'app-player',
@@ -169,13 +170,59 @@ export class PlayerComponent implements OnInit {
   }
 
   openAddNoteModal(type: PlayerNoteType) {
-    console.log('Opening add note modal for type:', type);
-    // TODO: Implement modal with pre-selected type
+    const modalRef = this.modalService.open(PlayerNoteModalComponent);
+    modalRef.componentInstance.playerId = this.player!.id;
+    modalRef.componentInstance.noteType = type;
+
+    modalRef.closed.subscribe((noteData: Partial<PlayerNote>) => {
+      if (noteData) {
+        this.playerNotesService.createNote(noteData as PlayerNote).subscribe({
+          next: (newNote) => {
+            this.playerNotes = [...this.playerNotes, newNote];
+            if (newNote.isActive) {
+              this.activeNotes = [...this.activeNotes, newNote];
+            }
+          },
+          error: (error) => {
+            console.error('Error creating note:', error);
+          }
+        });
+      }
+    });
   }
 
   editNote(note: PlayerNote) {
-    // TODO: Implement modal
-    console.log('Editing note:', note);
+    const modalRef = this.modalService.open(PlayerNoteModalComponent);
+    modalRef.componentInstance.playerId = this.player!.id;
+    modalRef.componentInstance.noteType = note.type;
+    modalRef.componentInstance.note = note;
+
+    modalRef.closed.subscribe((noteData: Partial<PlayerNote>) => {
+      if (noteData) {
+        this.playerNotesService.updateNote(note.id, noteData as PlayerNote).subscribe({
+          next: (updatedNote) => {
+            const index = this.playerNotes.findIndex(n => n.id === note.id);
+            if (index !== -1) {
+              this.playerNotes[index] = updatedNote;
+              this.playerNotes = [...this.playerNotes];
+            }
+
+            const activeIndex = this.activeNotes.findIndex(n => n.id === note.id);
+            if (updatedNote.isActive && activeIndex === -1) {
+              this.activeNotes = [...this.activeNotes, updatedNote];
+            } else if (!updatedNote.isActive && activeIndex !== -1) {
+              this.activeNotes = this.activeNotes.filter(n => n.id !== note.id);
+            } else if (activeIndex !== -1) {
+              this.activeNotes[activeIndex] = updatedNote;
+              this.activeNotes = [...this.activeNotes];
+            }
+          },
+          error: (error) => {
+            console.error('Error updating note:', error);
+          }
+        });
+      }
+    });
   }
 
   deleteNote(note: PlayerNote) {
