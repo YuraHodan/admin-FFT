@@ -203,4 +203,32 @@
 .badge {
   font-size: 0.8rem;
   padding: 0.4em 0.8em;
+}
+
+.btn-group {
+  .btn {
+    margin-left: 0.25rem;
+    
+    &:first-child {
+      margin-left: 0;
+    }
+
+    i {
+      font-size: 0.875rem;
+    }
+  }
+
+  .btn-warning {
+    color: #fff;
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .btn-info {
+    color: #fff;
+    &:hover {
+      color: #fff;
+    }
+  }
 } 

@@ -168,9 +168,9 @@ export class PlayerComponent implements OnInit {
     }
   }
 
-  openAddNoteModal() {
-    // TODO: Implement modal
-    console.log('Opening add note modal');
+  openAddNoteModal(type: PlayerNoteType) {
+    console.log('Opening add note modal for type:', type);
+    // TODO: Implement modal with pre-selected type
   }
 
   editNote(note: PlayerNote) {
