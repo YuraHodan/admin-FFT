@@ -94,14 +94,17 @@
                 <label class="form-label">Transfermarkt URL</label>
                 <input type="text" class="form-control" formControlName="transfermarktUrl">
               </div>
+
+              <div class="card-footer">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary w-100" 
+                  [disabled]="!playerForm.valid || !hasFormChanges()"
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div class="d-flex justify-content-end mb-3">
-            <button type="submit" class="btn btn-primary" [disabled]="!playerForm.valid">
-              Save Changes
-            </button>
           </div>
         </div>
       </div>

@@ -32,6 +32,7 @@ export class PlayerComponent implements OnInit {
   previewImage50x70: string | null = null;
   previewImage160x240: string | null = null;
   previewImage90x160: string | null = null;
+  initialFormValue: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -83,6 +84,8 @@ export class PlayerComponent implements OnInit {
             transfermarktUrl: player.transfermarktUrl
           });
 
+          this.initialFormValue = this.playerForm.value;
+
           if (this.player?.photo) {
             this.previewImage50x70 = this.player.photo;
             this.previewImage160x240 = this.player.photo;
@@ -93,6 +96,10 @@ export class PlayerComponent implements OnInit {
           this.router.navigate(['/players']);
         }
       });
+    });
+
+    this.playerForm.valueChanges.subscribe(() => {
+      this.checkFormChanges();
     });
   }
 
@@ -128,6 +135,18 @@ export class PlayerComponent implements OnInit {
         });
       };
       reader.readAsDataURL(file);
+    }
+  }
+
+  hasFormChanges(): boolean {
+    return JSON.stringify(this.initialFormValue) !== JSON.stringify(this.playerForm.value);
+  }
+
+  checkFormChanges() {
+    const hasChanges = this.hasFormChanges();
+    this.playerForm.markAsPristine();
+    if (hasChanges) {
+      this.playerForm.markAsDirty();
     }
   }
 } 
