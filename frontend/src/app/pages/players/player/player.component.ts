@@ -8,7 +8,9 @@ import { PlayersService } from '../../../services/players.service';
 import { PlayerFantasyPosition, PlayerMantraPosition } from '../../../models/player-positions.enum';
 import { COUNTRIES } from '../../../constants/countries.constant';
 import { Country } from '../../../models/country.interface';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PlayerNotesService } from '../../../services/player-notes.service';
+import { PlayerNote, PlayerNoteType } from '../../../models/player-note.interface';
 
 @Component({
   selector: 'app-player',
@@ -33,12 +35,18 @@ export class PlayerComponent implements OnInit {
   previewImage160x240: string | null = null;
   previewImage90x160: string | null = null;
   initialFormValue: any;
+  playerNotes: PlayerNote[] = [];
+  activeNotes: PlayerNote[] = [];
+  noteTypes = Object.values(PlayerNoteType);
+  PlayerNoteType = PlayerNoteType;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private playersService: PlayersService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private playerNotesService: PlayerNotesService,
+    private modalService: NgbModal
   ) {
     this.playerForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -91,15 +99,23 @@ export class PlayerComponent implements OnInit {
             this.previewImage160x240 = this.player.photo;
             this.previewImage90x160 = this.player.photo;
           }
+
+          this.playerNotesService.loadPlayerNotes(id).subscribe(notes => {
+            this.playerNotes = notes;
+          });
+
+          this.playerNotesService.getActivePlayerNotes(id).subscribe(notes => {
+            this.activeNotes = notes;
+          });
         },
         error: () => {
           this.router.navigate(['/players']);
         }
       });
-    });
 
-    this.playerForm.valueChanges.subscribe(() => {
-      this.checkFormChanges();
+      this.playerForm.valueChanges.subscribe(() => {
+        this.checkFormChanges();
+      });
     });
   }
 
@@ -148,5 +164,37 @@ export class PlayerComponent implements OnInit {
     if (hasChanges) {
       this.playerForm.markAsDirty();
     }
+  }
+
+  openAddNoteModal() {
+    // TODO: Implement modal
+    console.log('Opening add note modal');
+  }
+
+  editNote(note: PlayerNote) {
+    // TODO: Implement modal
+    console.log('Editing note:', note);
+  }
+
+  deleteNote(note: PlayerNote) {
+    if (confirm('Are you sure you want to delete this note?')) {
+      this.playerNotesService.deleteNote(note.id).subscribe({
+        next: () => {
+          this.playerNotes = this.playerNotes.filter(n => n.id !== note.id);
+          this.activeNotes = this.activeNotes.filter(n => n.id !== note.id);
+        },
+        error: (error) => {
+          console.error('Error deleting note:', error);
+        }
+      });
+    }
+  }
+
+  getActiveNotes(): PlayerNote[] {
+    return this.playerNotes.filter(note => note.isActive);
+  }
+
+  getNotesByType(type: PlayerNoteType): PlayerNote[] {
+    return this.playerNotes.filter(note => note.type === type);
   }
 } 

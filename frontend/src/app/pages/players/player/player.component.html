@@ -107,7 +107,118 @@
             </div>
           </div>
         </div>
+
+        <!-- Notes column -->
+        <div class="col-md-8">
+          <!-- Active Notes Section -->
+          <div class="card mb-4" *ngIf="activeNotes.length > 0">
+            <div class="card-header bg-danger text-white">
+              <h5 class="mb-0">Active Notes</h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group">
+                <div class="list-group-item" *ngFor="let note of activeNotes">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 class="mb-1">{{note.type}}</h6>
+                      <p class="mb-1">{{note.description}}</p>
+                      <small>Until: {{note.endDate | date}}</small>
+                    </div>
+                    <span class="badge bg-danger">Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes History Section -->
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Notes History</h5>
+              <button class="btn btn-primary btn-sm" (click)="openAddNoteModal()">
+                Add Note
+              </button>
+            </div>
+            <div class="card-body">
+              <!-- Active Notes -->
+              <div class="note-section mb-4" *ngIf="getActiveNotes().length">
+                <h6 class="section-title text-danger">Active Notes</h6>
+                <div class="list-group">
+                  <div class="list-group-item" *ngFor="let note of getActiveNotes()">
+                    <ng-container *ngTemplateOutlet="noteTemplate; context: { $implicit: note }"></ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Injuries -->
+              <div class="note-section mb-4" *ngIf="getNotesByType(PlayerNoteType.INJURY).length">
+                <h6 class="section-title text-warning">Injuries</h6>
+                <div class="list-group">
+                  <div class="list-group-item" *ngFor="let note of getNotesByType(PlayerNoteType.INJURY)">
+                    <ng-container *ngTemplateOutlet="noteTemplate; context: { $implicit: note }"></ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Red Cards -->
+              <div class="note-section mb-4" *ngIf="getNotesByType(PlayerNoteType.RED_CARD).length">
+                <h6 class="section-title text-danger">Red Cards</h6>
+                <div class="list-group">
+                  <div class="list-group-item" *ngFor="let note of getNotesByType(PlayerNoteType.RED_CARD)">
+                    <ng-container *ngTemplateOutlet="noteTemplate; context: { $implicit: note }"></ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Disqualifications -->
+              <div class="note-section mb-4" *ngIf="getNotesByType(PlayerNoteType.DISQUALIFICATION).length">
+                <h6 class="section-title text-dark">Disqualifications</h6>
+                <div class="list-group">
+                  <div class="list-group-item" *ngFor="let note of getNotesByType(PlayerNoteType.DISQUALIFICATION)">
+                    <ng-container *ngTemplateOutlet="noteTemplate; context: { $implicit: note }"></ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Personal -->
+              <div class="note-section mb-4" *ngIf="getNotesByType(PlayerNoteType.PERSONAL).length">
+                <h6 class="section-title text-info">Personal</h6>
+                <div class="list-group">
+                  <div class="list-group-item" *ngFor="let note of getNotesByType(PlayerNoteType.PERSONAL)">
+                    <ng-container *ngTemplateOutlet="noteTemplate; context: { $implicit: note }"></ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </form>
   </div>
-</div> 
+</div>
+
+<!-- Note Template -->
+<ng-template #noteTemplate let-note>
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <div class="d-flex align-items-center">
+        <span class="badge" [ngClass]="{
+          'bg-danger': note.isActive,
+          'bg-secondary': !note.isActive
+        }">{{note.isActive ? 'Active' : 'Inactive'}}</span>
+      </div>
+      <p class="mb-1 mt-2">{{note.description}}</p>
+      <small>
+        From: {{note.startDate | date}} - To: {{note.endDate | date}}
+      </small>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-outline-primary btn-sm" (click)="editNote(note)">
+        Edit
+      </button>
+      <button class="btn btn-outline-danger btn-sm" (click)="deleteNote(note)">
+        Delete
+      </button>
+    </div>
+  </div>
+</ng-template> 

@@ -1,8 +1,9 @@
 import { PlayerFantasyPosition, PlayerMantraPosition } from './player-positions.enum';
 import { ITeamShort } from './team-short.interface';
+import { IPlayerNote } from './player-note.interface';
 
 export interface IPlayer {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   photo: string;
@@ -11,7 +12,10 @@ export interface IPlayer {
   fantasyPosition: PlayerFantasyPosition;
   mantraPosition: PlayerMantraPosition;
   isArchived?: boolean;
-  team?: ITeamShort;
+  team?: ITeamShort | null;
   instagramUrl?: string;
   transfermarktUrl?: string;
+  notes?: IPlayerNote[];
+  isAvailable?: boolean;
+  activeNotes?: IPlayerNote[];
 } 

@@ -6,6 +6,7 @@ import teamRoutes from './routes/team.routes';
 import playerRoutes from './routes/player.routes';
 import seasonRoutes from './routes/season.routes';
 import tourRoutes from './routes/tour.routes';
+import playerNoteRoutes from './routes/player-note.routes';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use('/api/teams', teamRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api/seasons', seasonRoutes);
 app.use('/api/tours', tourRoutes);
+app.use('/api/player-notes', playerNoteRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/football-manager')

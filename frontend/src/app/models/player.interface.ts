@@ -1,5 +1,6 @@
 import { PlayerFantasyPosition, PlayerMantraPosition } from './player-positions.enum';
 import { TeamShort } from './team-short.interface';
+import { PlayerNote } from './player-note.interface';
 
 export interface Player {
   id: string;
@@ -14,4 +15,7 @@ export interface Player {
   team?: TeamShort | null;
   instagramUrl?: string;
   transfermarktUrl?: string;
+  notes?: PlayerNote[];
+  isAvailable?: boolean;
+  activeNotes?: PlayerNote[];
 } 
