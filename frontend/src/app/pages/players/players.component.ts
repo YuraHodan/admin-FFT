@@ -131,7 +131,7 @@ export class PlayersComponent implements OnInit {
     });
   }
 
-  onPlayerDetails(player: Player): void {
-    this.router.navigate(['/players', player.id]);
+  onPlayerDetails(player: Player) {
+    this.router.navigate(['/player', player.id]);
   }
 } 

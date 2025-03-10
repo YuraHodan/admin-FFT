@@ -25,16 +25,11 @@ export const routes: Routes = [
   },
   {
     path: 'players',
-    children: [
-      {
-        path: '',
-        component: PlayersComponent
-      },
-      {
-        path: ':id',
-        component: PlayerComponent
-      }
-    ]
+    component: PlayersComponent
+  },
+  {
+    path: 'player/:id',
+    component: PlayerComponent
   },
   {
     path: 'news',

@@ -69,7 +69,7 @@ export class PlayerComponent implements OnInit {
         return;
       }
 
-      this.playersService.getPlayerById(id).subscribe({
+      this.playersService.getPlayer(id).subscribe({
         next: (player) => {
           if (!player) {
             this.router.navigate(['/players']);
@@ -128,8 +128,10 @@ export class PlayerComponent implements OnInit {
       };
       
       this.playersService.updatePlayer(this.player.id, updatedPlayer).subscribe({
-        next: () => {
-          this.router.navigate(['/players']);
+        next: (updatedPlayer) => {
+          this.player = updatedPlayer;
+          this.initialFormValue = this.playerForm.value;
+          this.router.navigate(['/player', this.player.id]);
         },
         error: (error) => {
           console.error('Error updating player:', error);
