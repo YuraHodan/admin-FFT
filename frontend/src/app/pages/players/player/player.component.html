@@ -120,7 +120,7 @@
                 <div class="list-group-item" *ngFor="let note of activeNotes">
                   <div class="d-flex justify-content-between align-items-center">
                     <div>
-                      <h6 class="mb-1">{{note.type}}</h6>
+                      <h6 class="mb-1">{{note.title}}</h6>
                       <p class="mb-1">{{note.description}}</p>
                       <small>Until: {{note.endDate | date}}</small>
                     </div>
@@ -151,16 +151,6 @@
               </div>
             </div>
             <div class="card-body">
-              <!-- Active Notes -->
-              <div class="note-section mb-4" *ngIf="getActiveNotes().length">
-                <h6 class="section-title text-danger">Active Notes</h6>
-                <div class="list-group">
-                  <div class="list-group-item" *ngFor="let note of getActiveNotes()">
-                    <ng-container *ngTemplateOutlet="noteTemplate; context: { $implicit: note }"></ng-container>
-                  </div>
-                </div>
-              </div>
-
               <!-- Injuries -->
               <div class="note-section mb-4" *ngIf="getNotesByType(PlayerNoteType.INJURY).length">
                 <h6 class="section-title text-warning">Injuries</h6>
@@ -173,7 +163,6 @@
 
               <!-- Red Cards -->
               <div class="note-section mb-4" *ngIf="getNotesByType(PlayerNoteType.RED_CARD).length">
-                <h6 class="section-title text-danger">Red Cards</h6>
                 <div class="list-group">
                   <div class="list-group-item" *ngFor="let note of getNotesByType(PlayerNoteType.RED_CARD)">
                     <ng-container *ngTemplateOutlet="noteTemplate; context: { $implicit: note }"></ng-container>
@@ -218,7 +207,8 @@
           'bg-secondary': !note.isActive
         }">{{note.isActive ? 'Active' : 'Inactive'}}</span>
       </div>
-      <p class="mb-1 mt-2">{{note.description}}</p>
+      <h6 class="mb-1 mt-2">{{note.title}}</h6>
+      <p class="mb-1">{{note.description}}</p>
       <small>
         From: {{note.startDate | date}} - To: {{note.endDate | date}}
       </small>

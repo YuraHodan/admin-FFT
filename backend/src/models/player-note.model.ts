@@ -5,6 +5,7 @@ export interface IPlayerNoteDocument extends Omit<IPlayerNote, 'id'>, Document {
 
 const PlayerNoteSchema: Schema = new Schema({
   playerId: { type: String, required: true },
+  title: { type: String, required: true },
   type: { 
     type: String, 
     enum: ['INJURY', 'RED_CARD', 'DISQUALIFICATION', 'PERSONAL'],
