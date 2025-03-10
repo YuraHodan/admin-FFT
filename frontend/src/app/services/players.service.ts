@@ -87,4 +87,10 @@ export class PlayersService {
       })
     );
   }
+
+  getPlayerById(id: string): Observable<Player | null> {
+    return this.players$.pipe(
+      map(players => players.find(player => player.id === id) || null)
+    );
+  }
 } 

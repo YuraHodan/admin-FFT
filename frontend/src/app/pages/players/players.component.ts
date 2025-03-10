@@ -12,6 +12,7 @@ import { PlayersService } from '../../services/players.service';
 import { TeamsService } from '../../services/teams.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-players',
@@ -36,7 +37,8 @@ export class PlayersComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private playersService: PlayersService,
-    private teamsService: TeamsService
+    private teamsService: TeamsService,
+    private router: Router
   ) {
     this.players$ = this.playersService.players$;
     this.teams$ = this.teamsService.teams$;
@@ -127,5 +129,9 @@ export class PlayersComponent implements OnInit {
         this.playersService.deletePlayer(result.id).subscribe();
       }
     });
+  }
+
+  onPlayerDetails(player: Player): void {
+    this.router.navigate(['/players', player.id]);
   }
 } 

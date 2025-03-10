@@ -1,0 +1,110 @@
+<div class="player-details" *ngIf="player">
+  <div class="container py-4">
+    <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <img [src]="playerForm.get('photo')?.value" class="card-img-top" [alt]="playerForm.get('firstName')?.value">
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label">Photo</label>
+                <div class="d-flex flex-column gap-3">
+                  <div>
+                    <input type="file" class="form-control" (change)="onFileChange($event)" accept="image/*">
+                  </div>
+                  <div class="d-flex gap-3 preview-container" *ngIf="previewImage50x70 || previewImage160x240 || previewImage90x160">
+                    <div class="preview-box">
+                      <span class="preview-label">50x70</span>
+                      <img [src]="previewImage50x70" alt="Preview 50x70" class="preview-50x70">
+                    </div>
+                    <div class="preview-box">
+                      <span class="preview-label">160x240</span>
+                      <img [src]="previewImage160x240" alt="Preview 160x240" class="preview-160x240">
+                    </div>
+                    <div class="preview-box">
+                      <span class="preview-label">90x160</span>
+                      <img [src]="previewImage90x160" alt="Preview 90x160" class="preview-90x160">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" formControlName="firstName">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" formControlName="lastName">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Birth Date</label>
+                <input type="date" class="form-control" formControlName="birthDate">
+              </div>
+
+              <div class="mb-3">
+                <label for="country" class="form-label">Country</label>
+                <ng-select
+                  [items]="countries"
+                  bindLabel="name"
+                  bindValue="code"
+                  placeholder="Select country"
+                  formControlName="country"
+                  [clearable]="false"
+                >
+                  <ng-template ng-option-tmp let-item="item">
+                    <span class="f32">
+                      <span class="flag {{ item.code }}"></span>
+                    </span>
+                    <span class="country-name">{{ item.name }}</span>
+                  </ng-template>
+                  <ng-template ng-label-tmp let-item="item">
+                    <div class="selected-country" *ngIf="item">
+                      <span class="f32">
+                        <span class="flag {{ item.code }}"></span>
+                      </span>
+                      <span class="country-name">{{ item.name }}</span>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Fantasy Position</label>
+                <select class="form-select" formControlName="fantasyPosition">
+                  <option *ngFor="let pos of fantasyPositions" [value]="pos">{{pos}}</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Mantra Position</label>
+                <select class="form-select" formControlName="mantraPosition">
+                  <option *ngFor="let pos of mantraPositions" [value]="pos">{{pos}}</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Instagram URL</label>
+                <input type="text" class="form-control" formControlName="instagramUrl">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Transfermarkt URL</label>
+                <input type="text" class="form-control" formControlName="transfermarktUrl">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="d-flex justify-content-end mb-3">
+            <button type="submit" class="btn btn-primary" [disabled]="!playerForm.valid">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div> 
