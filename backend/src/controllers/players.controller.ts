@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Player from '../models/player.model';
 import Team from '../models/team.model';
+import PlayerNote from '../models/player-note.model';
 
 export class PlayerController {
   // Get all players
@@ -18,12 +19,27 @@ export class PlayerController {
     try {
       const player = await Player.findById(req.params.id);
       if (!player) {
-        res.status(404).json({ message: 'Player not found' });
-        return;
+        return res.status(404).json({ message: 'Player not found' });
       }
-      res.status(200).json(player);
+
+      // Отримуємо активні обмежуючі нотатки
+      const now = new Date();
+      const restrictingNotes = await PlayerNote.find({
+        playerId: req.params.id,  // використовуємо req.params.id замість player.id
+        type: { $in: ['INJURY', 'RED_CARD', 'DISQUALIFICATION'] },
+        startDate: { $lte: now },
+        endDate: { $gte: now }
+      });
+
+      // Конвертуємо player в звичайний об'єкт
+      const playerObj = player.toObject();
+      
+      // Встановлюємо isAvailable на основі наявності обмежуючих нотаток
+      playerObj.isAvailable = restrictingNotes.length === 0;
+
+      res.json(playerObj);
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching player', error });
+      res.status(500).json({ message: 'Error getting player', error });
     }
   }
 
