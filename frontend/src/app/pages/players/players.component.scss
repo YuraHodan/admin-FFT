@@ -69,4 +69,20 @@
     border-color: #ced4da;
     box-shadow: none;
   }
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  &.not-available {
+    color: #f44336;
+  }
+  
+  .warning-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
 } 

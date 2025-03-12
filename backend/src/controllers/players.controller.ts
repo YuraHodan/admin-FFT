@@ -7,10 +7,28 @@ export class PlayerController {
   // Get all players
   public async getPlayers(req: Request, res: Response): Promise<void> {
     try {
-      const players = await Player.find();
-      res.status(200).json(players);
+      const players = await Player.find(req.query);
+      const now = new Date();
+
+      const playersWithAvailability = await Promise.all(players.map(async (player) => {
+        // Спочатку перевіряємо нотатки
+        const restrictingNotes = await PlayerNote.find({
+          playerId: player._id,  // використовуємо _id
+          type: { $in: ['INJURY', 'RED_CARD', 'DISQUALIFICATION'] },
+          startDate: { $lte: now },
+          endDate: { $gte: now }
+        });
+
+        // Потім конвертуємо в об'єкт зі збереженням віртуальних полів
+        const playerObj = player.toJSON();
+        playerObj.isNotAvailable = restrictingNotes.length > 0;
+        
+        return playerObj;
+      }));
+
+      res.json(playersWithAvailability);
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching players', error });
+      res.status(500).json({ message: 'Error getting players', error });
     }
   }
 
@@ -22,20 +40,17 @@ export class PlayerController {
         return res.status(404).json({ message: 'Player not found' });
       }
 
-      // Отримуємо активні обмежуючі нотатки
       const now = new Date();
       const restrictingNotes = await PlayerNote.find({
-        playerId: req.params.id,  // використовуємо req.params.id замість player.id
+        playerId: req.params.id,
         type: { $in: ['INJURY', 'RED_CARD', 'DISQUALIFICATION'] },
         startDate: { $lte: now },
         endDate: { $gte: now }
       });
 
-      // Конвертуємо player в звичайний об'єкт
       const playerObj = player.toObject();
       
-      // Встановлюємо isAvailable на основі наявності обмежуючих нотаток
-      playerObj.isAvailable = restrictingNotes.length === 0;
+      playerObj.isNotAvailable = restrictingNotes.length > 0;
 
       res.json(playerObj);
     } catch (error) {

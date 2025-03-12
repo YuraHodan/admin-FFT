@@ -34,6 +34,14 @@ export class PlayersComponent implements OnInit {
   nameFilter: string = '';
   teamFilter: string | null = null;
 
+  displayedColumns: string[] = [
+    'firstName',
+    'lastName',
+    'team',
+    'status',
+    'actions'
+  ];
+
   constructor(
     private modalService: NgbModal,
     private playersService: PlayersService,

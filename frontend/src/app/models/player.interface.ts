@@ -16,6 +16,6 @@ export interface Player {
   instagramUrl?: string;
   transfermarktUrl?: string;
   notes?: PlayerNote[];
-  isAvailable?: boolean;
+  isNotAvailable?: boolean;
   activeNotes?: PlayerNote[];
 } 

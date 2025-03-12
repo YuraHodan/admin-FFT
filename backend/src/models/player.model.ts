@@ -28,7 +28,7 @@ const PlayerSchema: Schema = new Schema({
     enum: Object.values(PlayerMantraPosition),
     required: true 
   },
-  isArchived: { type: Boolean, default: false },
+  isNotAvailable: { type: Boolean, default: false },
   team: { type: TeamShortSchema, required: false },
   instagramUrl: { type: String },
   transfermarktUrl: { type: String }

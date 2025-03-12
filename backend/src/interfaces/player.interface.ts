@@ -16,6 +16,6 @@ export interface IPlayer {
   instagramUrl?: string;
   transfermarktUrl?: string;
   notes?: IPlayerNote[];
-  isAvailable?: boolean;
+  isNotAvailable: boolean;
   activeNotes?: IPlayerNote[];
 } 

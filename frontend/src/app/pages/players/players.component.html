@@ -46,6 +46,7 @@
           <th>Name</th>
           <th>Team</th>
           <th>Position</th>
+          <th>Status</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -57,6 +58,11 @@
           <td>{{ player.firstName }} {{ player.lastName }}</td>
           <td>{{ player.team?.name }}</td>
           <td>{{ player.fantasyPosition }} / {{ player.mantraPosition }}</td>
+          <td>
+            <span class="status-indicator" *ngIf="player.isNotAvailable">
+              ⚠️
+            </span>
+          </td>
           <td>
             <div class="btn-group">
               <button class="btn btn-outline-primary" (click)="onPlayerDetails(player)">
