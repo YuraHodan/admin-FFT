@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Player } from '../models/player.interface';
+import { log } from 'node:console';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +53,7 @@ export class PlayersService {
   }
 
   updatePlayer(id: string, player: Player): Observable<Player> {
+    console.log('Updating player with ID:', id);
     return this.http.put<Player>(`${this.apiUrl}/${id}`, player).pipe(
       map(player => this.convertDates(player)),
       tap(updatedPlayer => {

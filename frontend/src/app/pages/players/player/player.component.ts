@@ -65,11 +65,8 @@ export class PlayerComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      console.log('Route params:', params);
       this.playerId = params['id'];
-      console.log('Player ID:', this.playerId);
       if (!this.playerId) {
-        console.log('No player ID found, redirecting to players list');
         this.router.navigate(['/players']);
         return;
       }
@@ -131,12 +128,11 @@ export class PlayerComponent implements OnInit {
         ...this.playerForm.value,
         birthDate: new Date(this.playerForm.value.birthDate)
       };
-      
-      this.playersService.updatePlayer(this.player.id, updatedPlayer).subscribe({
+      this.playersService.updatePlayer(this.playerId, updatedPlayer).subscribe({
         next: (updatedPlayer) => {
           this.player = updatedPlayer;
           this.initialFormValue = this.playerForm.value;
-          this.router.navigate(['/player', this.player.id]);
+          this.router.navigate(['/player', this.playerId]);
         },
         error: (error) => {
           console.error('Error updating player:', error);
