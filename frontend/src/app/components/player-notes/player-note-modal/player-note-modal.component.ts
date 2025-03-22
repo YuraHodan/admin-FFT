@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,7 +11,7 @@ import { PlayerNote, PlayerNoteType } from '../../../models/player-note.interfac
   templateUrl: './player-note-modal.component.html',
   styleUrls: ['./player-note-modal.component.scss']
 })
-export class PlayerNoteModalComponent {
+export class PlayerNoteModalComponent implements OnInit {
   @Input() playerId!: string;
   @Input() noteType!: PlayerNoteType;
   @Input() note?: PlayerNote;

@@ -180,7 +180,6 @@ export class TourComponent implements OnInit {
         // Update existing tour
         this.toursService.updateTour(this.tourId, tourData).subscribe({
           next: (tour) => {
-            console.log('Tour updated:', tour);
             this.router.navigate(['/schedule']);
           },
           error: (error) => {
@@ -192,7 +191,6 @@ export class TourComponent implements OnInit {
         // Create new tour
         this.toursService.createTour(tourData).subscribe({
           next: (tour) => {
-            console.log('Tour created:', tour);
             this.router.navigate(['/schedule']);
           },
           error: (error) => {
@@ -249,7 +247,6 @@ export class TourComponent implements OnInit {
     if (this.tourId && confirm('Are you sure you want to delete this tour? This action cannot be undone.')) {
       this.toursService.deleteTour(this.tourId).subscribe({
         next: () => {
-          console.log('Tour deleted successfully');
           this.router.navigate(['/schedule']);
         },
         error: (error) => {

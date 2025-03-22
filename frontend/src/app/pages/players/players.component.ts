@@ -140,6 +140,8 @@ export class PlayersComponent implements OnInit {
   }
 
   onPlayerDetails(player: Player) {
+    console.log('Navigating to player details:', player);
+    console.log('Player ID:', player.id);
     this.router.navigate(['/player', player.id]);
   }
 } 

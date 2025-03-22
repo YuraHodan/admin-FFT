@@ -40,6 +40,7 @@ export class PlayerComponent implements OnInit {
   activeNotes: PlayerNote[] = [];
   noteTypes = Object.values(PlayerNoteType);
   PlayerNoteType = PlayerNoteType;
+  playerId!: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -64,13 +65,16 @@ export class PlayerComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      const id = params['id'];
-      if (!id) {
+      console.log('Route params:', params);
+      this.playerId = params['id'];
+      console.log('Player ID:', this.playerId);
+      if (!this.playerId) {
+        console.log('No player ID found, redirecting to players list');
         this.router.navigate(['/players']);
         return;
       }
 
-      this.playersService.getPlayer(id).subscribe({
+      this.playersService.getPlayer(this.playerId).subscribe({
         next: (player) => {
           if (!player) {
             this.router.navigate(['/players']);
@@ -101,11 +105,11 @@ export class PlayerComponent implements OnInit {
             this.previewImage90x160 = this.player.photo;
           }
 
-          this.playerNotesService.loadPlayerNotes(id).subscribe(notes => {
+          this.playerNotesService.loadPlayerNotes(this.playerId).subscribe(notes => {
             this.playerNotes = notes;
           });
 
-          this.playerNotesService.getActivePlayerNotes(id).subscribe(notes => {
+          this.playerNotesService.getActivePlayerNotes(this.playerId).subscribe(notes => {
             this.activeNotes = notes;
           });
         },
@@ -171,10 +175,10 @@ export class PlayerComponent implements OnInit {
 
   openAddNoteModal(type: PlayerNoteType) {
     const modalRef = this.modalService.open(PlayerNoteModalComponent);
-    modalRef.componentInstance.playerId = this.player!.id;
+    modalRef.componentInstance.playerId = this.playerId;
     modalRef.componentInstance.noteType = type;
 
-    modalRef.closed.subscribe((noteData: Partial<PlayerNote>) => {
+    modalRef.result.then((noteData: Partial<PlayerNote>) => {
       if (noteData) {
         this.playerNotesService.createNote(noteData as PlayerNote).subscribe({
           next: (newNote) => {
@@ -193,11 +197,11 @@ export class PlayerComponent implements OnInit {
 
   editNote(note: PlayerNote) {
     const modalRef = this.modalService.open(PlayerNoteModalComponent);
-    modalRef.componentInstance.playerId = this.player!.id;
+    modalRef.componentInstance.playerId = this.playerId;
     modalRef.componentInstance.noteType = note.type;
     modalRef.componentInstance.note = note;
 
-    modalRef.closed.subscribe((noteData: Partial<PlayerNote>) => {
+    modalRef.result.then((noteData: Partial<PlayerNote>) => {
       if (noteData) {
         this.playerNotesService.updateNote(note.id, noteData as PlayerNote).subscribe({
           next: (updatedNote) => {
