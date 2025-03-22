@@ -95,6 +95,16 @@
                 <input type="text" class="form-control" formControlName="transfermarktUrl">
               </div>
 
+              <div class="mb-3">
+                <label class="form-label">Team</label>
+                <select class="form-select" formControlName="team">
+                  <option [ngValue]="null">Select team</option>
+                  <option *ngFor="let team of teams" [ngValue]="team">
+                    {{ team.name }}
+                  </option>
+                </select>
+              </div>
+
               <div class="card-footer">
                 <button 
                   type="submit" 

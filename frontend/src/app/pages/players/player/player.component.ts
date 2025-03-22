@@ -12,6 +12,8 @@ import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PlayerNotesService } from '../../../services/player-notes.service';
 import { PlayerNote, PlayerNoteType } from '../../../models/player-note.interface';
 import { PlayerNoteModalComponent } from '../../../components/player-notes/player-note-modal/player-note-modal.component';
+import { TeamsService } from '../../../services/teams.service';
+import { TeamShort } from '../../../models/team-short.interface';
 
 @Component({
   selector: 'app-player',
@@ -41,6 +43,7 @@ export class PlayerComponent implements OnInit {
   noteTypes = Object.values(PlayerNoteType);
   PlayerNoteType = PlayerNoteType;
   playerId!: string;
+  teams: TeamShort[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -48,7 +51,8 @@ export class PlayerComponent implements OnInit {
     private playersService: PlayersService,
     private fb: FormBuilder,
     private playerNotesService: PlayerNotesService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private teamsService: TeamsService
   ) {
     this.playerForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -59,11 +63,21 @@ export class PlayerComponent implements OnInit {
       fantasyPosition: ['', Validators.required],
       mantraPosition: [''],
       instagramUrl: [''],
-      transfermarktUrl: ['']
+      transfermarktUrl: [''],
+      team: [null]
     });
   }
 
   ngOnInit() {
+    this.teamsService.loadTeams().subscribe();
+    this.teamsService.teams$.subscribe(teams => {
+      this.teams = teams.map(team => ({
+        id: team.id.toString(),
+        name: team.name,
+        logo: team.logo
+      }));
+    });
+
     this.route.params.subscribe(params => {
       this.playerId = params['id'];
       if (!this.playerId) {
@@ -82,6 +96,10 @@ export class PlayerComponent implements OnInit {
             COUNTRIES.find(country => country.code === player.country)?.code : 
             null;
 
+          const currentTeam = player?.team?.id ? 
+            this.teams.find(team => team.id === player.team?.id) : 
+            null;
+
           this.playerForm.patchValue({
             firstName: player.firstName,
             lastName: player.lastName,
@@ -91,7 +109,8 @@ export class PlayerComponent implements OnInit {
             fantasyPosition: player.fantasyPosition,
             mantraPosition: player.mantraPosition,
             instagramUrl: player.instagramUrl,
-            transfermarktUrl: player.transfermarktUrl
+            transfermarktUrl: player.transfermarktUrl,
+            team: currentTeam
           });
 
           this.initialFormValue = this.playerForm.value;
@@ -123,11 +142,21 @@ export class PlayerComponent implements OnInit {
 
   onSubmit() {
     if (this.playerForm.valid && this.player) {
+      const formValue = this.playerForm.value;
+      
+      const selectedTeam = formValue.team ? {
+        id: formValue.team.id,
+        name: formValue.team.name,
+        logo: formValue.team.logo
+      } : null;
+
       const updatedPlayer = {
         ...this.player,
-        ...this.playerForm.value,
-        birthDate: new Date(this.playerForm.value.birthDate)
+        ...formValue,
+        team: selectedTeam,
+        birthDate: new Date(formValue.birthDate)
       };
+
       this.playersService.updatePlayer(this.playerId, updatedPlayer).subscribe({
         next: (updatedPlayer) => {
           this.player = updatedPlayer;
