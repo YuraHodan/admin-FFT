@@ -82,6 +82,11 @@ export const routes: Routes = [
       import('./pages/seasons/seasons.component').then((m) => m.SeasonsComponent),
   },
   {
+    path: 'predicted-lineups',
+    loadComponent: () =>
+      import('./pages/predicted-lineups/predicted-lineups.component').then((m) => m.PredictedLineupsComponent),
+  },
+  {
     path: '**',
     redirectTo: '/404'
   }

@@ -47,5 +47,10 @@ export const MENU_ITEMS: MenuItem[] = [
     title: 'Seasons',
     icon: 'bi bi-trophy',
     link: '/seasons'
+  },
+  {
+    title: 'Predicted Lineups',
+    icon: 'bi bi-clipboard-data',
+    link: '/predicted-lineups'
   }
 ]; 
