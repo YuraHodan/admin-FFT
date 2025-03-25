@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Tour } from '../../models/tour.interface';
 import { ToursService } from '../../services/tours.service';
 
 @Component({
   selector: 'app-predicted-lineups',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './predicted-lineups.component.html',
   styleUrls: ['./predicted-lineups.component.scss']
 })

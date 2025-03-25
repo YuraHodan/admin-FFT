@@ -83,8 +83,18 @@ export const routes: Routes = [
   },
   {
     path: 'predicted-lineups',
-    loadComponent: () =>
-      import('./pages/predicted-lineups/predicted-lineups.component').then((m) => m.PredictedLineupsComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/predicted-lineups/predicted-lineups.component').then((m) => m.PredictedLineupsComponent),
+      },
+      {
+        path: ':id',
+        loadComponent: () =>
+          import('./pages/predicted-lineups/predicted-lineup/predicted-lineup.component').then((m) => m.PredictedLineupComponent),
+      }
+    ]
   },
   {
     path: '**',
