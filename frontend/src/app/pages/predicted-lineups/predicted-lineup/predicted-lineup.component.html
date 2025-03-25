@@ -1,7 +1,12 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col">
-      <h2>Predicted Lineup</h2>
+      <h2>Predicted Lineup - Tour {{ tour?.number }}</h2>
+      <p *ngIf="tour">
+        {{ tour.startDate | date }} - {{ tour.endDate | date }}
+        <br>
+        Status: {{ tour.status }}
+      </p>
     </div>
   </div>
 </div> 
