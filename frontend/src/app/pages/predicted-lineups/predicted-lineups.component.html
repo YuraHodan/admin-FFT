@@ -4,4 +4,18 @@
       <h2>Predicted Lineups</h2>
     </div>
   </div>
+
+  <div class="row mt-4">
+    <div class="col">
+      <div class="list-group">
+        <div class="list-group-item" *ngFor="let tour of tours">
+          <h5 class="mb-1">Tour {{ tour.number }}</h5>
+          <p class="mb-1">
+            {{ tour.startDate | date }} - {{ tour.endDate | date }}
+          </p>
+          <small>Status: {{ tour.status }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
 </div> 
